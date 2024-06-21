@@ -11,7 +11,7 @@
   <img src="https://img.shields.io/badge/Frontend-Vue-green" alt="Vue">
   <img src="https://img.shields.io/badge/Backend-Gin-orange" alt="Gin">
   <img src="https://img.shields.io/badge/Tool-Docker-blue" alt="Docker">
-  <img src="https://img.shields.io/badge/Database-PostgreSQL-blue" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/Database-MySQL-blue" alt="MySQL">
 </p>
 
 ### 项目简介
