@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "backend/routes"
 
 func main() {
-	fmt.Printf("hi,go!")
+	routes.InitRoute()
 }
