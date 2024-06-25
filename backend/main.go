@@ -1,7 +1,12 @@
 package main
 
-import "backend/routes"
+import (
+	"backend/model"
+	"backend/routes"
+)
 
 func main() {
+	//引用数据库
+	model.InitDB()
 	routes.InitRoute()
 }
