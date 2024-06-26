@@ -24,6 +24,10 @@ func InitRoute() {
 		router.PUT("category/:id", v1.EditCate)
 		router.DELETE("category/:id", v1.DeleteCate)
 		//文章模块的路由接口
+		router.POST("article/add", v1.AddArt)
+		router.GET("article", v1.GetArt)
+		router.PUT("article/:id", v1.EditArt)
+		router.DELETE("article/:id", v1.DeleteArt)
 	}
 
 	err := r.Run(utils.HttpPort)
