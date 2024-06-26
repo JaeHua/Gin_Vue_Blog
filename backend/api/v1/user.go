@@ -39,8 +39,10 @@ func AddUser(c *gin.Context) {
 
 // 查询用户列表
 func GetUsers(c *gin.Context) {
+	//字符串转为数字
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	//gorm规定，-1表示不作限制，查询所有
 	if pageSize == 0 {
 		pageSize = -1
 	}
