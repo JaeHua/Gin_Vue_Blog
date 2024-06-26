@@ -65,3 +65,27 @@ func ScryptPw(password string) string {
 	fpw := base64.StdEncoding.EncodeToString(HashPw)
 	return fpw
 }
+
+// DeleteUser 删除用户信息
+func DeleteUser(id int) int {
+	var user User
+	err := DB.Where("id=?", id).Delete(&user).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCESS
+}
+
+// EditUser 编辑用户信息
+func EditUser(id int, data *User) int {
+	var user User
+	var maps = make(map[string]interface{})
+	//密码之外的信息更新，要更新密码应该是新的单独接口
+	maps["username"] = data.Username
+	maps["role"] = data.Role
+	err := DB.Model(&user).Where("id=?", id).Updates(maps).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCESS
+}
