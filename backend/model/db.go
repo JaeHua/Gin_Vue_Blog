@@ -9,7 +9,7 @@ import (
 )
 
 // 全局变量
-var db *gorm.DB
+var DB *gorm.DB
 
 var err error
 
@@ -20,6 +20,8 @@ func InitDB() {
 	if err != nil {
 		fmt.Printf("连接数据库出错，请检查配置", err)
 	}
+	//禁用默认表名的复数形式
+	db.SingularTable(true)
 	//迁移数据库
 	db.AutoMigrate(&User{}, &Article{}, &Category{})
 
@@ -30,10 +32,13 @@ func InitDB() {
 	db.DB().SetMaxOpenConns(100)
 
 	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
-	db.DB().SetConnMaxLifetime(time.Hour)
+	db.DB().SetConnMaxLifetime(10 * time.Second)
 
-	err1 := db.Close()
-	if err1 != nil {
-		return
+	if db == nil {
+		println("fuck")
 	}
+	DB = db
+}
+func GetDB() *gorm.DB {
+	return DB
 }
