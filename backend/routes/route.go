@@ -27,6 +27,8 @@ func InitRoute() {
 
 		auth.PUT("article/:id", v1.EditArt)
 		auth.DELETE("article/:id", v1.DeleteArt)
+		//上传文件
+		auth.POST("upload", v1.UpLoad)
 	}
 	public := r.Group("api/v1")
 	{

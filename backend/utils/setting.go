@@ -7,15 +7,19 @@ import (
 
 // 全局变量
 var (
-	AppMode    string
-	HttpPort   string
-	JwtKey     string
-	Db         string
-	DbHost     string
-	DbPort     string
-	DbUser     string
-	DbPassword string
-	DbName     string
+	AppMode     string
+	HttpPort    string
+	JwtKey      string
+	Db          string
+	DbHost      string
+	DbPort      string
+	DbUser      string
+	DbPassword  string
+	DbName      string
+	AccessKey   string
+	SecreteKey  string
+	Bucket      string
+	QiniuServer string
 )
 
 // 初始化
@@ -27,6 +31,7 @@ func init() {
 	}
 	LoadServe(file)
 	LoadDatabase(file)
+	LoadQiNiu(file)
 }
 
 func LoadServe(file *ini.File) {
@@ -42,5 +47,12 @@ func LoadDatabase(file *ini.File) {
 	DbUser = file.Section("database").Key("DbUser").MustString("root")
 	DbPassword = file.Section("database").Key("DbPassword").MustString("jjh529529")
 	DbName = file.Section("database").Key("DbName").MustString("GinBlog")
+
+}
+func LoadQiNiu(file *ini.File) {
+	AccessKey = file.Section("qiniu").Key("AccessKey").String()
+	SecreteKey = file.Section("qiniu").Key("SecreteKey").String()
+	Bucket = file.Section("qiniu").Key("Bucket").String()
+	QiniuServer = file.Section("qiniu").Key("QiniuServer").String()
 
 }
