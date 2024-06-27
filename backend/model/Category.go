@@ -41,7 +41,7 @@ func CreateCate(data *Category) int {
 func GetCate(pageSize int, pageNum int) []Category {
 	var cate []Category
 	//分页查询核心逻辑
-	err = DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Error
+	err := DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Error
 	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
 		return nil
 	}
@@ -58,7 +58,7 @@ func DeleteCate(id int) int {
 	return errmsg.SUCCESS
 }
 
-// EditCate 编辑f分类信息
+// EditCate 编辑分类信息
 func EditCate(id int, data *Category) int {
 	var cate Category
 	var maps = make(map[string]interface{})
@@ -71,4 +71,13 @@ func EditCate(id int, data *Category) int {
 	return errmsg.SUCCESS
 }
 
-//todo 查询分类下的所有文章
+// GetCateArt 查询分类下的所有文章
+func GetCateArt(id int, pageSize int, pageNum int) ([]Article, int) {
+	var cateArts []Article
+	err := DB.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid=?", id).Find(&cateArts).Error
+	if err != nil {
+		return nil, errmsg.ERROR_CATE_NOT_EXIST
+
+	}
+	return cateArts, errmsg.SUCCESS
+}

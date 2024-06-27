@@ -34,10 +34,10 @@ func GetArt(c *gin.Context) {
 	if pageNum == 0 {
 		pageNum = -1
 	}
-	data := model.GetArt(pageSize, pageNum)
-	code = errmsg.SUCCESS
+	data, code := model.GetArt(pageSize, pageNum)
 
-	c.JSON(http.StatusOK, gin.H{"status": code,
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
 		"data":    data,
 		"message": errmsg.GetErrMsg(code)})
 }
@@ -63,4 +63,16 @@ func DeleteArt(c *gin.Context) {
 		"status":  code,
 		"message": errmsg.GetErrMsg(code),
 	})
+}
+
+// GetArtInfo 查询单个文章
+func GetArtInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	data, code := model.GetArtInfo(id)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+
 }

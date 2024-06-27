@@ -7,7 +7,7 @@ import (
 )
 
 type Article struct {
-	Category Category
+	Category Category `gorm:"foreignKey:Cid"`
 	gorm.Model
 	Title   string `gorm:"type:varchar(100);not null" json:"title"`
 	Cid     int    `gorm:"type:int;not null" json:"cid"`
@@ -26,19 +26,27 @@ func CreateArt(data *Article) int {
 	return errmsg.SUCCESS
 }
 
-// todo 查询单个文章
+// GetArtInfo 查询单个文章
+func GetArtInfo(id int) (Article, int) {
+	var art Article
+	err := DB.Preload("Category").Where("id=?", id).First(&art).Error
+	if err != nil {
+		return art, errmsg.ERROR_ART_NOT_EXIST
+	}
+	return art, errmsg.SUCCESS
+}
 
 //todo 查询分类下的所有文章
 
 // GetArt 分页查询文章列表
-func GetArt(pageSize int, pageNum int) []Article {
-	var art []Article
+func GetArt(pageSize int, pageNum int) ([]Article, int) {
+	var arts []Article
 	//分页查询核心逻辑
-	err = DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&art).Error
+	err = DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
 	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
-		return nil
+		return nil, errmsg.ERROR
 	}
-	return art
+	return arts, errmsg.SUCCESS
 }
 
 // DeleteArt 删除文章信息
