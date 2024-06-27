@@ -4,6 +4,7 @@ import (
 	"backend/model"
 	"backend/utils/errmsg"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -15,6 +16,7 @@ func AddUser(c *gin.Context) {
 	var data model.User
 
 	_ = c.ShouldBindJSON(&data)
+	log.Println(data)
 	//log.Println(data.Username)
 	//log.Println(data.Password)
 	//log.Println(data.Role)
@@ -60,6 +62,7 @@ func EditUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
+	log.Println(data)
 	code = model.CheckUser(data.Username)
 	if code == errmsg.SUCCESS {
 		model.EditUser(id, &data)

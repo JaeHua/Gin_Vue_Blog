@@ -89,3 +89,18 @@ func EditUser(id int, data *User) int {
 	}
 	return errmsg.SUCCESS
 }
+
+func CheckLogin(username string, password string) int {
+	var user User
+	DB.Where("username=?", username).First(&user)
+	if user.ID == 0 {
+		return errmsg.ERROR_USER_NOT_EXIST
+	}
+	if user.Password != ScryptPw(password) {
+		return errmsg.ERROR_PASSWORD_WORNG
+	}
+	if user.Role != 0 {
+		return errmsg.ERROR_USER_NO_RIGHT
+	}
+	return errmsg.SUCCESS
+}

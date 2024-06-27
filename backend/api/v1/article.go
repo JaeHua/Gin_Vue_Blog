@@ -4,6 +4,7 @@ import (
 	"backend/model"
 	"backend/utils/errmsg"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -12,7 +13,7 @@ func AddArt(c *gin.Context) {
 	var data model.Article
 
 	_ = c.ShouldBindJSON(&data)
-
+	log.Println(data.Title)
 	model.CreateArt(&data)
 
 	c.JSON(http.StatusOK, gin.H{

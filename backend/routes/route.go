@@ -2,6 +2,7 @@ package routes
 
 import (
 	v1 "backend/api/v1"
+	"backend/middleware"
 	"backend/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -11,27 +12,32 @@ func InitRoute() {
 	gin.SetMode(utils.AppMode)
 	r := gin.Default()
 
-	router := r.Group("api/v1")
+	auth := r.Group("api/v1")
+	auth.Use(middleware.JwtToken())
 	{
 		//用户模块的路由接口
-		router.POST("user/add", v1.AddUser)
-		router.GET("users", v1.GetUsers)
-		router.PUT("user/:id", v1.EditUser)
-		router.DELETE("user/:id", v1.DeleteUser)
+		auth.PUT("user/:id", v1.EditUser)
+		auth.DELETE("user/:id", v1.DeleteUser)
 		//分类模块的路由接口
-		router.POST("category/add", v1.AddCate)
-		router.GET("category", v1.GetCate)
-		router.PUT("category/:id", v1.EditCate)
-		router.DELETE("category/:id", v1.DeleteCate)
+		auth.POST("category/add", v1.AddCate)
+		auth.PUT("category/:id", v1.EditCate)
+		auth.DELETE("category/:id", v1.DeleteCate)
 		//文章模块的路由接口
-		router.POST("article/add", v1.AddArt)
-		router.GET("article", v1.GetArt)
-		router.GET("article/info/:id", v1.GetArtInfo)
-		router.GET("category/article/:id", v1.GetCateArt)
-		router.PUT("article/:id", v1.EditArt)
-		router.DELETE("article/:id", v1.DeleteArt)
-	}
+		auth.POST("article/add", v1.AddArt)
 
+		auth.PUT("article/:id", v1.EditArt)
+		auth.DELETE("article/:id", v1.DeleteArt)
+	}
+	public := r.Group("api/v1")
+	{
+		public.POST("user/add", v1.AddUser)
+		public.GET("users", v1.GetUsers)
+		public.GET("category", v1.GetCate)
+		public.GET("article", v1.GetArt)
+		public.GET("article/info/:id", v1.GetArtInfo)
+		public.GET("category/article/:id", v1.GetCateArt)
+		public.POST("login", v1.Login)
+	}
 	err := r.Run(utils.HttpPort)
 	if err != nil {
 		return
