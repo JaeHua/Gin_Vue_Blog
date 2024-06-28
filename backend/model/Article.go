@@ -39,14 +39,15 @@ func GetArtInfo(id int) (Article, int) {
 //todo 查询分类下的所有文章
 
 // GetArt 分页查询文章列表
-func GetArt(pageSize int, pageNum int) ([]Article, int) {
+func GetArt(pageSize int, pageNum int) ([]Article, int, int) {
 	var arts []Article
+	var total int
 	//分页查询核心逻辑
-	err = DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+	err = DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Count(&total).Error
 	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
-		return nil, errmsg.ERROR
+		return nil, errmsg.ERROR, 0
 	}
-	return arts, errmsg.SUCCESS
+	return arts, errmsg.SUCCESS, total
 }
 
 // DeleteArt 删除文章信息

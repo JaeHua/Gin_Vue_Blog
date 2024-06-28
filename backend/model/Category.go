@@ -38,14 +38,15 @@ func CreateCate(data *Category) int {
 }
 
 // GetCate 分页查询分类列表
-func GetCate(pageSize int, pageNum int) []Category {
+func GetCate(pageSize int, pageNum int) ([]Category, int) {
 	var cate []Category
+	var total int
 	//分页查询核心逻辑
-	err := DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Error
+	err := DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Count(&total).Error
 	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
-		return nil
+		return nil, 0
 	}
-	return cate
+	return cate, total
 }
 
 // DeleteCate 删除分类信息
@@ -72,12 +73,13 @@ func EditCate(id int, data *Category) int {
 }
 
 // GetCateArt 查询分类下的所有文章
-func GetCateArt(id int, pageSize int, pageNum int) ([]Article, int) {
+func GetCateArt(id int, pageSize int, pageNum int) ([]Article, int, int) {
 	var cateArts []Article
-	err := DB.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid=?", id).Find(&cateArts).Error
+	var total int
+	err := DB.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid=?", id).Find(&cateArts).Count(&total).Error
 	if err != nil {
-		return nil, errmsg.ERROR_CATE_NOT_EXIST
+		return nil, errmsg.ERROR_CATE_NOT_EXIST, 0
 
 	}
-	return cateArts, errmsg.SUCCESS
+	return cateArts, errmsg.SUCCESS, total
 }

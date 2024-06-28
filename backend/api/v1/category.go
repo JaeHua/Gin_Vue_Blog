@@ -41,11 +41,13 @@ func GetCate(c *gin.Context) {
 	if pageNum == 0 {
 		pageNum = -1
 	}
-	data := model.GetCate(pageSize, pageNum)
+	data, total := model.GetCate(pageSize, pageNum)
 	code = errmsg.SUCCESS
 
-	c.JSON(http.StatusOK, gin.H{"status": code,
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
 		"data":    data,
+		"total":   total,
 		"message": errmsg.GetErrMsg(code)})
 }
 
@@ -90,8 +92,10 @@ func GetCateArt(c *gin.Context) {
 	if pageNum == 0 {
 		pageNum = -1
 	}
-	data, code := model.GetCateArt(id, pageSize, pageNum)
-	c.JSON(http.StatusOK, gin.H{"status": code,
+	data, code, total := model.GetCateArt(id, pageSize, pageNum)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
 		"data":    data,
+		"total":   total,
 		"message": errmsg.GetErrMsg(code)})
 }
