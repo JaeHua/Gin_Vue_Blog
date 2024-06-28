@@ -14,7 +14,7 @@ func InitRoute() {
 	//!!!
 	r.Use(middleware.Logger())
 	r.Use(gin.Recovery())
-
+	r.Use(middleware.Cors())
 	auth := r.Group("api/v1")
 	auth.Use(middleware.JwtToken())
 	{

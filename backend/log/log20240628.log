@@ -1,0 +1,8 @@
+time="2024-06-28 11:55:12" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=550 HostName=JJH Ip=127.0.0.1 Method=GET Path="/api/v1/article?pagesize=2&pagenum=1" SpendTime="16 ms" status=200
+time="2024-06-28 12:21:52" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=51 HostName=JJH Ip=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="0 ms" status=200
+time="2024-06-28 12:21:58" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=58 HostName=JJH Ip=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="0 ms" status=200
+time="2024-06-28 12:22:08" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=51 HostName=JJH Ip=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="0 ms" status=200
+time="2024-06-28 12:22:17" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=67 HostName=JJH Ip=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="0 ms" status=200
+time="2024-06-28 14:59:41" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=378 HostName=JJH Ip=127.0.0.1 Method=GET Path="/api/v1/users?pagesize=2&pagenum=1" SpendTime="22 ms" status=200
+time="2024-06-28 15:00:45" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=560 HostName=JJH Ip=127.0.0.1 Method=GET Path="/api/v1/category/article/1?pagesize=2&pagenum=1" SpendTime="12 ms" status=200
+time="2024-06-28 15:00:54" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=95 HostName=JJH Ip=127.0.0.1 Method=GET Path="/api/v1/category?pagesize=2&pagenum=1" SpendTime="5 ms" status=200
