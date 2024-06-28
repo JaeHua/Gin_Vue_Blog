@@ -3,6 +3,7 @@ package v1
 import (
 	"backend/model"
 	"backend/utils/errmsg"
+	"backend/utils/validator"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -15,12 +16,21 @@ var code int
 func AddUser(c *gin.Context) {
 	var data model.User
 
+	var msg string
+	var validCode int
 	_ = c.ShouldBindJSON(&data)
-	log.Println(data)
-	//log.Println(data.Username)
-	//log.Println(data.Password)
-	//log.Println(data.Role)
 
+	msg, validCode = validator.Validate(&data)
+	if validCode != errmsg.SUCCESS {
+		c.JSON(
+			http.StatusOK, gin.H{
+				"status":  validCode,
+				"message": msg,
+			},
+		)
+		c.Abort()
+		return
+	}
 	code = model.CheckUser(data.Username)
 
 	//成功才写入数据库
@@ -32,7 +42,6 @@ func AddUser(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
-		"data":    data,
 		"message": errmsg.GetErrMsg(code),
 	})
 }
