@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="loginBox">
-            <a-form-model :rules="rules" :model="formdata" class="loginForm">
+            <a-form-model ref="ruleForm" :rules="rules" :model="formdata" class="loginForm">
                 <a-form-model-item prop="username">
                     <a-input v-model="formdata.username" placeholder="请输入用户名">
                         <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
@@ -13,8 +13,8 @@
                     </a-input>
                 </a-form-model-item>
                 <a-form-model-item class="loginBtn">
-                    <a-button type="primary" style="margin: 20px;">登陆</a-button>
-                    <a-button >取消</a-button>
+                    <a-button type="primary" style="margin: 20px;" @click="login">登陆</a-button>
+                    <a-button @click="resetForm">重置</a-button>
                 </a-form-model-item>
             </a-form-model>
         </div>
@@ -38,6 +38,20 @@ export default {
           { min: 6, max: 20, message: '密码必须在6到20个字符之间', trigger: 'blur' }
         ]
       }
+    }
+  },
+  methods: {
+    resetForm () {
+      this.$refs.ruleForm.resetFields()
+    },
+    login () {
+      this.$refs.ruleForm.validate((valid) => {
+        if (!valid) {
+          return this.$message.error('输入非法数据，请重试')
+        }
+        const res = this.$http.post('login', this.formdata)
+        console.log(res)
+      })
     }
   }
 }
