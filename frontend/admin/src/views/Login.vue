@@ -45,12 +45,13 @@ export default {
       this.$refs.ruleForm.resetFields()
     },
     login () {
-      this.$refs.ruleForm.validate((valid) => {
-        if (!valid) {
-          return this.$message.error('输入非法数据，请重试')
-        }
-        const res = this.$http.post('login', this.formdata)
-        console.log(res)
+      this.$refs.ruleForm.validate(async (valid) => {
+        if (!valid) return this.$message.error('输入非法数据，请重试')
+        // 结构赋值 data: res
+        const { data: res } = await this.$http.post('login', this.formdata)
+        if (res.status !== 200) return this.$message.error(res.message)
+        window.localStorage.setItem('token', res.token)
+        this.$router.push('admin')
       })
     }
   }
