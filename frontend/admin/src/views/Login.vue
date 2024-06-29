@@ -8,7 +8,7 @@
                     </a-input>
                 </a-form-model-item>
                 <a-form-model-item prop="password">
-                    <a-input v-model="formdata.password" type="password" placeholder="请输入密码">
+                    <a-input v-on:keyup.enter="login" v-model="formdata.password" type="password" placeholder="请输入密码">
                         <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
                     </a-input>
                 </a-form-model-item>
@@ -50,7 +50,8 @@ export default {
         // 结构赋值 data: res
         const { data: res } = await this.$http.post('login', this.formdata)
         if (res.status !== 200) return this.$message.error(res.message)
-        window.localStorage.setItem('token', res.token)
+        // window.localStorage.setItem('token', res.token) 区别是关闭浏览器会不会清除token
+        window.sessionStorage.setItem('token', res.token)
         this.$router.push('admin')
       })
     }
