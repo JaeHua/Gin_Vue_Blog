@@ -4,6 +4,7 @@ import (
 	"backend/utils/errmsg"
 	"errors"
 	"github.com/jinzhu/gorm"
+	"log"
 )
 
 type Article struct {
@@ -41,13 +42,23 @@ func GetArtInfo(id int) (Article, int) {
 // GetArt 分页查询文章列表
 func GetArt(pageSize int, pageNum int) ([]Article, int, int) {
 	var arts []Article
-	var total int
-	//分页查询核心逻辑
-	err = DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Count(&total).Error
-	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
+	var total int64
+
+	// 先计算总数
+	err := DB.Model(&Article{}).Count(&total).Error
+	if err != nil {
+		log.Printf("Error counting articles: %v", err)
 		return nil, errmsg.ERROR, 0
 	}
-	return arts, errmsg.SUCCESS, total
+
+	// 分页查询
+	err = DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		log.Printf("Error finding articles: %v", err)
+		return nil, errmsg.ERROR, int(total)
+	}
+
+	return arts, errmsg.SUCCESS, int(total)
 }
 
 // DeleteArt 删除文章信息

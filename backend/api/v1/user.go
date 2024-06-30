@@ -58,9 +58,11 @@ func GetUsers(c *gin.Context) {
 	if pageNum == 0 {
 		pageNum = -1
 	}
-	data, total := model.GetUsers(pageSize, pageNum)
+	var data []model.User
+	var total int
+	data, total = model.GetUsers(pageSize, pageNum)
 	code = errmsg.SUCCESS
-
+	log.Println("data,", data)
 	c.JSON(http.StatusOK, gin.H{"status": code,
 		"data":    data,
 		"total":   total,

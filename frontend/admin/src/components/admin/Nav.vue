@@ -27,7 +27,8 @@ export default {
   },
   methods: {
     goToPage (item) {
-      this.$router.push(item.key)
+      // 连续点击菜单就不会报错了(catch了)
+      this.$router.push('/admin/' + item.key).catch(err => err)
     }
   }
 }

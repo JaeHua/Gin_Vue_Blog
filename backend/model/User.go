@@ -45,13 +45,23 @@ func CreateUser(data *User) int {
 // GetUsers 分页查询用户列表
 func GetUsers(pageSize int, pageNum int) ([]User, int) {
 	var users []User
-	var total int
-	//分页查询核心逻辑
-	err = DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Count(&total).Error
-	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
+	var total int64
+
+	// 先计算总数
+	err := DB.Model(&User{}).Count(&total).Error
+	if err != nil {
+		log.Printf("Error counting users: %v", err)
 		return nil, 0
 	}
-	return users, total
+
+	// 分页查询
+	err = DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		log.Printf("Error finding users: %v", err)
+		return nil, int(total)
+	}
+
+	return users, int(total)
 }
 
 // ScryptPw 密码加密

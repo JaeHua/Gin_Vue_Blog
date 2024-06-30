@@ -40,13 +40,22 @@ func CreateCate(data *Category) int {
 // GetCate 分页查询分类列表
 func GetCate(pageSize int, pageNum int) ([]Category, int) {
 	var cate []Category
-	var total int
-	//分页查询核心逻辑
-	err := DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Count(&total).Error
-	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
+	var total int64
+
+	// 先计算总数
+	err := DB.Model(&Category{}).Count(&total).Error
+	if err != nil {
+		log.Printf("Error counting categories: %v", err)
 		return nil, 0
 	}
-	return cate, total
+
+	// 分页查询
+	err = DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		log.Printf("Error finding categories: %v", err)
+		return nil, int(total)
+	}
+	return cate, int(total)
 }
 
 // DeleteCate 删除分类信息
@@ -73,13 +82,23 @@ func EditCate(id int, data *Category) int {
 }
 
 // GetCateArt 查询分类下的所有文章
+// GetCateArt 查询分类下的所有文章
 func GetCateArt(id int, pageSize int, pageNum int) ([]Article, int, int) {
 	var cateArts []Article
-	var total int
-	err := DB.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid=?", id).Find(&cateArts).Count(&total).Error
-	if err != nil {
-		return nil, errmsg.ERROR_CATE_NOT_EXIST, 0
+	var total int64
 
+	// 先计算总数
+	err := DB.Model(&Article{}).Where("cid = ?", id).Count(&total).Error
+	if err != nil {
+		log.Printf("Error counting articles in category %d: %v", id, err)
+		return nil, errmsg.ERROR_CATE_NOT_EXIST, 0
 	}
-	return cateArts, errmsg.SUCCESS, total
+
+	// 分页查询
+	err = DB.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid = ?", id).Find(&cateArts).Error
+	if err != nil {
+		log.Printf("Error finding articles in category %d: %v", id, err)
+		return nil, errmsg.ERROR_CATE_NOT_EXIST, int(total)
+	}
+	return cateArts, errmsg.SUCCESS, int(total)
 }
