@@ -52,7 +52,7 @@ export default {
         if (res.status !== 200) return this.$message.error(res.message)
         // window.localStorage.setItem('token', res.token) 区别是关闭浏览器会不会清除token
         window.sessionStorage.setItem('token', res.token)
-        this.$router.push('admin')
+        this.$router.push('admin/index')
       })
     }
   }

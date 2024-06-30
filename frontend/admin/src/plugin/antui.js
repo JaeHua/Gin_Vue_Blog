@@ -10,7 +10,9 @@ import {
   Card,
   Table,
   Row,
-  Col
+  Col,
+  Tag,
+  ConfigProvider
 } from 'ant-design-vue'
 message.config({
   top: '100px',
@@ -29,3 +31,5 @@ Vue.use(Table)
 Vue.use(Card)
 Vue.use(Row)
 Vue.use(Col)
+Vue.use(Tag)
+Vue.use(ConfigProvider)
