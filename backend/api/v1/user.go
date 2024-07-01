@@ -51,6 +51,7 @@ func GetUsers(c *gin.Context) {
 	//字符串转为数字
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	username := c.Query("username")
 	//gorm规定，-1表示不作限制，查询所有
 	if pageSize == 0 {
 		pageSize = -1
@@ -60,7 +61,7 @@ func GetUsers(c *gin.Context) {
 	}
 	var data []model.User
 	var total int
-	data, total = model.GetUsers(pageSize, pageNum)
+	data, total = model.GetUsers(username, pageSize, pageNum)
 	code = errmsg.SUCCESS
 	log.Println("data,", data)
 	c.JSON(http.StatusOK, gin.H{"status": code,

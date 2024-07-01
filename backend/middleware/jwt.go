@@ -55,7 +55,7 @@ func JwtToken() gin.HandlerFunc {
 		code := errmsg.SUCCESS
 		if tokenHeader == "" {
 			code = errmsg.ERROR_TOKEN_NOT_EXIST
-			c.JSON(http.StatusOK, gin.H{"code": code,
+			c.JSON(http.StatusOK, gin.H{"status": code,
 				"message": errmsg.GetErrMsg(code)})
 			c.Abort()
 			return

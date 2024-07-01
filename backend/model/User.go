@@ -43,24 +43,39 @@ func CreateUser(data *User) int {
 }
 
 // GetUsers 分页查询用户列表
-func GetUsers(pageSize int, pageNum int) ([]User, int) {
+func GetUsers(username string, pageSize int, pageNum int) ([]User, int) {
+	var user User
 	var users []User
 	var total int64
 
-	// 先计算总数
-	err := DB.Model(&User{}).Count(&total).Error
+	// 分页查询
+	if username == "" {
+		// 查询所有用户
+		err = DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("Error finding users: %v", err)
+			return nil, 0
+		}
+	} else {
+		// 模糊查询
+		err = DB.Where("username LIKE ?", username+"%").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("Error finding users: %v", err)
+			return nil, 0
+		}
+	}
+
+	// 计算总数
+	if username == "" {
+		err = DB.Model(&user).Count(&total).Error
+	} else {
+		err = DB.Model(&user).Where("username LIKE ?", username+"%").Count(&total).Error
+	}
+
 	if err != nil {
 		log.Printf("Error counting users: %v", err)
 		return nil, 0
 	}
-
-	// 分页查询
-	err = DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		log.Printf("Error finding users: %v", err)
-		return nil, int(total)
-	}
-
 	return users, int(total)
 }
 
