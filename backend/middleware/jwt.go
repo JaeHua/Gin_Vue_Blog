@@ -65,7 +65,7 @@ func JwtToken() gin.HandlerFunc {
 		checkToken := strings.SplitN(tokenHeader, " ", 2)
 		if len(checkToken) != 2 && checkToken[0] != "Bearer" {
 			code = errmsg.ERROR_TOKEN_TYPE_WRONG
-			c.JSON(http.StatusOK, gin.H{"code": code,
+			c.JSON(http.StatusOK, gin.H{"status": code,
 				"message": errmsg.GetErrMsg(code)})
 			c.Abort()
 			return
@@ -74,7 +74,7 @@ func JwtToken() gin.HandlerFunc {
 		key, tCode := CheckToken(checkToken[1])
 		if tCode == errmsg.ERROR {
 			code = errmsg.ERROR_TOKEN_WRONG
-			c.JSON(http.StatusOK, gin.H{"code": code,
+			c.JSON(http.StatusOK, gin.H{"status": code,
 				"message": errmsg.GetErrMsg(code)})
 			c.Abort()
 			return
@@ -82,7 +82,7 @@ func JwtToken() gin.HandlerFunc {
 		//是否过期
 		if time.Now().Unix() > key.ExpiresAt {
 			code = errmsg.ERROR_TOKEN_RUNTIME
-			c.JSON(http.StatusOK, gin.H{"code": code,
+			c.JSON(http.StatusOK, gin.H{"status": code,
 				"message": errmsg.GetErrMsg(code)})
 			c.Abort()
 			return
