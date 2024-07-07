@@ -28,7 +28,7 @@
       </span>
       <template slot="action" slot-scope="data">
         <div class="actionSlot">
-          <a-button type="primary" style="margin-right: 20px;">编辑</a-button>
+          <a-button type="primary" @click="editUser(data.ID)" style="margin-right: 20px;">编辑</a-button>
           <a-button type="danger" @click="deleteUser(data.ID)">删除</a-button>
         </div>
       </template>
@@ -52,6 +52,27 @@
       </a-form-model-item>
       <a-form-model-item hasFeedback label="确认密码" prop="checkpass">
         <a-input-password  v-model="userInfo.checkpass"></a-input-password>
+      </a-form-model-item>
+      <a-form-model-item label="是否为管理员"  prop="role">
+        <a-select default-value="2" style="width: 120px" @change="adminChange">
+          <a-select-option value="1">是</a-select-option>
+          <a-select-option value="2">否</a-select-option>
+        </a-select>
+      </a-form-model-item>
+    </a-form-model>
+    </a-modal>
+    <!-- 编辑用户 -->
+    <a-modal
+    title="编辑用户"
+    :visible="editUservisible"
+    @ok="editUserOk"
+    @cancel="editUserCancel"
+    closable
+    :destroyOnClose="true"
+  >
+    <a-form-model :model="userInfo" :rules="userRules" ref="userRef">
+      <a-form-model-item label="用户名" prop="username">
+        <a-input v-model="userInfo.username"></a-input>
       </a-form-model-item>
       <a-form-model-item label="是否为管理员"  prop="role">
         <a-select default-value="2" style="width: 120px" @change="adminChange">
@@ -116,6 +137,7 @@ export default {
       },
       visible: false,
       addUservisible: false,
+      editUservisible: false,
       userInfo: {
         id: 0,
         username: '',
@@ -209,10 +231,15 @@ export default {
     },
     // 新增用户
     addUserOk () {
-      this.$refs.userRef.validate((valid) => {
+      this.$refs.userRef.validate(async (valid) => {
         if (!valid) return this.$message.error('参数不符合要求，请重新输入')
-        this.$http.post('user/add', { username: this.userInfo.username, password: this.userInfo.password, role: this.userInfo.role })
+
+        const { data: res } = await this.$http.post('user/add', { username: this.userInfo.username, password: this.userInfo.password, role: this.userInfo.role })
         this.$message.success('用户添加成功')
+        if (res.status !== 200) {
+          this.addUservisible = false
+          return this.$message.error(res.message)
+        }
       })
       this.addUservisible = false
       this.getUserlist()
@@ -220,9 +247,34 @@ export default {
     addUserCancel () {
       this.$refs.userRef.resetFields()
       this.addUservisible = false
+      this.$message.info('编辑已取消')
     },
     adminChange (value) {
       this.userInfo.role = value
+    },
+    async editUser (id) {
+      this.editUservisible = true
+      const { data: res } = await this.$http.get(`user/${id}`)
+      this.userInfo = res.data
+      this.userInfo.id = id
+    },
+    editUserCancel () {
+      this.$refs.userRef.resetFields()
+      this.editUservisible = false
+      this.$message.info('编辑已取消')
+    },
+    editUserOk () {
+      this.$refs.userRef.validate(async (valid) => {
+        if (!valid) return this.$message.error('参数不符合要求，请重新输入')
+        const { data: res } = await this.$http.put(`user/${this.userInfo.id}`, { username: this.userInfo.username, role: this.userInfo.role })
+        if (res.status !== 200) {
+          this.editUservisible = false
+          return this.$message.error(res.message)
+        }
+        this.$message.success('用户更新成功')
+        this.editUservisible = false
+        this.getUserlist()
+      })
     }
   }
 }
