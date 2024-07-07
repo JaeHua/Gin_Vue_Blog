@@ -98,3 +98,14 @@ func DeleteUser(c *gin.Context) {
 		"message": errmsg.GetErrMsg(code),
 	})
 }
+
+func GetUserInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	data, code := model.GetUserInfo(id)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"total":   1,
+		"message": errmsg.GetErrMsg(code),
+	})
+}

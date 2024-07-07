@@ -37,6 +37,7 @@ func InitRoute() {
 	{
 		public.POST("user/add", v1.AddUser)
 		public.GET("users", v1.GetUsers)
+		public.GET("user/:id", v1.GetUserInfo)
 		public.GET("category", v1.GetCate)
 		public.GET("article", v1.GetArt)
 		public.GET("article/info/:id", v1.GetArtInfo)

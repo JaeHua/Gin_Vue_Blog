@@ -42,6 +42,16 @@ func CreateUser(data *User) int {
 	return errmsg.SUCCESS
 }
 
+// GetUserInfo 查询单个用户信息
+func GetUserInfo(id int) (User, int) {
+	var user User
+	err := DB.Where("id=?", id).First(&user).Error
+	if err != nil {
+		return user, errmsg.ERROR
+	}
+	return user, errmsg.SUCCESS
+}
+
 // GetUsers 分页查询用户列表
 func GetUsers(username string, pageSize int, pageNum int) ([]User, int) {
 	var user User
