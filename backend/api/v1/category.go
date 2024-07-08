@@ -99,3 +99,14 @@ func GetCateArt(c *gin.Context) {
 		"total":   total,
 		"message": errmsg.GetErrMsg(code)})
 }
+
+// GetCateInfo 查询单个分类
+func GetCateInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	data, code := model.GetCateInfo(id)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"total":   1,
+		"message": errmsg.GetErrMsg(code)})
+}

@@ -102,3 +102,10 @@ func GetCateArt(id int, pageSize int, pageNum int) ([]Article, int, int) {
 	}
 	return cateArts, errmsg.SUCCESS, int(total)
 }
+
+// GetCateInfo 查询单个分类
+func GetCateInfo(id int) (Category, int) {
+	var cate Category
+	DB.Where("id=?", id).First(&cate)
+	return cate, errmsg.SUCCESS
+}

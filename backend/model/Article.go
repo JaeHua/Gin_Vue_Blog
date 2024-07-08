@@ -40,24 +40,35 @@ func GetArtInfo(id int) (Article, int) {
 //todo 查询分类下的所有文章
 
 // GetArt 分页查询文章列表
-func GetArt(pageSize int, pageNum int) ([]Article, int, int) {
+func GetArt(title string, pageSize int, pageNum int) ([]Article, int, int) {
 	var arts []Article
 	var total int64
 
+	if title == "" {
+		err = DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("Error finding articles: %v", err)
+			return nil, errmsg.ERROR, int(total)
+		}
+	} else {
+		err = DB.Preload("Category").Where("title LIKE ?", title+"%").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("Error finding articles: %v", err)
+			return nil, errmsg.ERROR, int(total)
+		}
+	}
 	// 先计算总数
-	err := DB.Model(&Article{}).Count(&total).Error
+	if title == "" {
+		err = DB.Model(&Article{}).Count(&total).Error
+
+	} else {
+		err = DB.Model(&Article{}).Where("title LIKE ?", title+"%").Count(&total).Error
+
+	}
 	if err != nil {
 		log.Printf("Error counting articles: %v", err)
 		return nil, errmsg.ERROR, 0
 	}
-
-	// 分页查询
-	err = DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
-	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
-		log.Printf("Error finding articles: %v", err)
-		return nil, errmsg.ERROR, int(total)
-	}
-
 	return arts, errmsg.SUCCESS, int(total)
 }
 
