@@ -82,7 +82,7 @@ const columns = [
   {
     title: 'ID',
     dataIndex: 'ID',
-    width: '10%',
+    width: '5%',
     key: 'id',
     align: 'center'
   },
@@ -103,7 +103,8 @@ const columns = [
   },
   {
     title: '操作',
-    width: '20%',
+    width: '10%',
+    align: 'center',
     key: 'action',
     scopedSlots: { customRender: 'action' }
   }
@@ -280,6 +281,8 @@ export default {
         if (res.status !== 200) {
           return this.$message.error(res.message)
         }
+        this.addUservisible = false
+        this.getUserlist()
       })
       this.addUservisible = false
       this.getUserlist()
@@ -318,6 +321,8 @@ export default {
         this.editUservisible = false
         this.getUserlist()
       })
+      this.editUservisible = false
+      this.getUserlist()
     }
   }
 }

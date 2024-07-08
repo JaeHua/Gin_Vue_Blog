@@ -13,3 +13,12 @@ body,
     margin-top: 15px;
     font-size:17px
 }
+.Artimg{
+    height: 100%;
+    width: 100%;
+  }
+.Artimg img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
