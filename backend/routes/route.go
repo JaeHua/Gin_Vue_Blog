@@ -20,6 +20,7 @@ func InitRoute() {
 	{
 		//用户模块的路由接口
 		auth.PUT("user/:id", v1.EditUser)
+		auth.PUT("userinfo/:id", v1.ResetUserInfo)
 		auth.DELETE("user/:id", v1.DeleteUser)
 		//分类模块的路由接口
 		auth.POST("category/add", v1.AddCate)

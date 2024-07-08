@@ -31,6 +31,24 @@ func CheckUser(name string) (code int) {
 
 }
 
+// CheckUpUser 更新查询用户
+func CheckUpUser(id int, name string) (code int) {
+	var users User
+	if DB == nil {
+		log.Println("Database is not initialized")
+		return errmsg.ERROR
+	}
+	DB.Select("id").Where("username=?", name).First(&users)
+	if users.ID == uint(id) {
+		return errmsg.SUCCESS
+	}
+	if users.ID > 0 {
+		return errmsg.ERROR_USERNAME_USED
+	}
+	return errmsg.SUCCESS
+
+}
+
 // CreateUser 创建用户
 func CreateUser(data *User) int {
 	//加密操作
@@ -137,6 +155,17 @@ func CheckLogin(username string, password string) int {
 	}
 	if user.Role != 1 {
 		return errmsg.ERROR_USER_NO_RIGHT
+	}
+	return errmsg.SUCCESS
+}
+
+func ResetUserPass(id int) int {
+	var user User
+	var maps = make(map[string]interface{})
+	maps["password"] = ScryptPw("123456")
+	err := DB.Model(&user).Where("id=?", id).Updates(maps).Error
+	if err != nil {
+		return errmsg.ERROR
 	}
 	return errmsg.SUCCESS
 }

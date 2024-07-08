@@ -5,7 +5,6 @@ import (
 	"backend/utils/errmsg"
 	"backend/utils/validator"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -63,7 +62,7 @@ func GetUsers(c *gin.Context) {
 	var total int
 	data, total = model.GetUsers(username, pageSize, pageNum)
 	code = errmsg.SUCCESS
-	log.Println("data,", data)
+	//log.Println("data,", data)
 	c.JSON(http.StatusOK, gin.H{"status": code,
 		"data":    data,
 		"total":   total,
@@ -76,8 +75,8 @@ func EditUser(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
 	//log.Println(data)
-	code = model.CheckUser(data.Username)
-	log.Println(data.Username)
+	code = model.CheckUpUser(id, data.Username)
+	//log.Println(data.Username)
 	if code == errmsg.SUCCESS {
 		model.EditUser(id, &data)
 	}
@@ -107,6 +106,14 @@ func GetUserInfo(c *gin.Context) {
 		"status":  code,
 		"data":    data,
 		"total":   1,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
+func ResetUserInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	code := model.ResetUserPass(id)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
 		"message": errmsg.GetErrMsg(code),
 	})
 }
