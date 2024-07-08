@@ -28,8 +28,9 @@
       </span>
       <template slot="action" slot-scope="data">
         <div class="actionSlot">
-          <a-button type="primary" @click="editUser(data.ID)" style="margin-right: 20px;">编辑</a-button>
-          <a-button type="danger" @click="deleteUser(data.ID)">删除</a-button>
+          <a-button type="primary" icon="edit" @click="editUser(data.ID)" style="margin-right: 20px;">编辑</a-button>
+          <a-button type="danger" icon="delete" @click="deleteUser(data.ID)" style="margin-right: 20px;">删除</a-button>
+          <a-button type="info" icon="scissor" @click="resetUser(data.ID)">重置密码</a-button>
         </div>
       </template>
       </a-table>
@@ -43,21 +44,15 @@
     closable
     :destroyOnClose="true"
   >
-    <a-form-model :model="userInfo" :rules="userRules" ref="userRef">
+    <a-form-model :model="newUserInfo" :rules="adduserRules" ref="userRef">
       <a-form-model-item label="用户名" prop="username">
-        <a-input v-model="userInfo.username"></a-input>
+        <a-input v-model="newUserInfo.username"></a-input>
       </a-form-model-item>
       <a-form-model-item hasFeedback label="密码" prop="password">
-        <a-input-password  v-model="userInfo.password"></a-input-password>
+        <a-input-password  v-model="newUserInfo.password"></a-input-password>
       </a-form-model-item>
       <a-form-model-item hasFeedback label="确认密码" prop="checkpass">
-        <a-input-password  v-model="userInfo.checkpass"></a-input-password>
-      </a-form-model-item>
-      <a-form-model-item label="是否为管理员"  prop="role">
-        <a-select default-value="2" style="width: 120px" @change="adminChange">
-          <a-select-option value="1">是</a-select-option>
-          <a-select-option value="2">否</a-select-option>
-        </a-select>
+        <a-input-password  v-model="newUserInfo.checkpass"></a-input-password>
       </a-form-model-item>
     </a-form-model>
     </a-modal>
@@ -75,10 +70,7 @@
         <a-input v-model="userInfo.username"></a-input>
       </a-form-model-item>
       <a-form-model-item label="是否为管理员"  prop="role">
-        <a-select default-value="2" style="width: 120px" @change="adminChange">
-          <a-select-option value="1">是</a-select-option>
-          <a-select-option value="2">否</a-select-option>
-        </a-select>
+        <a-switch checked-children="是" un-checked-children="否"  :defaultChecked="Boolean((this.userInfo.role===1))"  @change="adminChange" />
       </a-form-model-item>
     </a-form-model>
     </a-modal>
@@ -145,6 +137,13 @@ export default {
         checkpass: '',
         role: 2
       },
+      newUserInfo: {
+        id: 0,
+        username: '',
+        password: '',
+        checkpass: '',
+        role: 2
+      },
       userRules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -163,6 +162,30 @@ export default {
           validator: (rule, value, callback) => {
             if (this.userInfo.checkpass === '') { callback(new Error('请再次输入密码')) }
             if (this.userInfo.checkpass !== this.userInfo.password) { callback(new Error('密码不一致')) } else {
+              callback()
+            }
+          },
+          trigger: 'blur'
+        }]
+      },
+      adduserRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 4, max: 12, message: '用户名必须在4到12个字符之间', trigger: 'blur' }
+        ],
+        password: [{
+          validator: (rule, value, callback) => {
+            if (this.newUserInfo.password === '') { callback(new Error('请输入密码')) }
+            if ([...this.newUserInfo.password].length < 6 || [...this.newUserInfo.password].length > 20) { callback(new Error('密码应当在6到20位之间')) } else {
+              callback()
+            }
+          },
+          trigger: 'blur'
+        }],
+        checkpass: [{
+          validator: (rule, value, callback) => {
+            if (this.newUserInfo.checkpass === '') { callback(new Error('请再次输入密码')) }
+            if (this.newUserInfo.checkpass !== this.newUserInfo.password) { callback(new Error('密码不一致')) } else {
               callback()
             }
           },
@@ -229,15 +252,32 @@ export default {
         }
       })
     },
+    resetUser (id) {
+      this.$confirm({
+        title: '提示:确定重置密码?',
+        content: '一旦重置，无法恢复',
+        onOk: async () => {
+          const { data: res } = await this.$http.put(`userinfo/${id}`)
+          console.log(res)
+          if (res.status !== 200) {
+            this.$message.error(res.message)
+          }
+          this.$message.success('重置密码成功')
+          this.getUserlist()
+        },
+        onCancel: async () => {
+          this.$message.info('已取消重置密码')
+        }
+      })
+    },
     // 新增用户
     addUserOk () {
       this.$refs.userRef.validate(async (valid) => {
         if (!valid) return this.$message.error('参数不符合要求，请重新输入')
 
-        const { data: res } = await this.$http.post('user/add', { username: this.userInfo.username, password: this.userInfo.password, role: this.userInfo.role })
+        const { data: res } = await this.$http.post('user/add', { username: this.newUserInfo.username, password: this.newUserInfo.password, role: this.newUserInfo.role })
         this.$message.success('用户添加成功')
         if (res.status !== 200) {
-          this.addUservisible = false
           return this.$message.error(res.message)
         }
       })
@@ -249,8 +289,12 @@ export default {
       this.addUservisible = false
       this.$message.info('编辑已取消')
     },
-    adminChange (value) {
-      this.userInfo.role = value
+    adminChange (checked) {
+      if (checked) {
+        this.userInfo.role = 1
+      } else {
+        this.userInfo.role = 2
+      }
     },
     async editUser (id) {
       this.editUservisible = true
@@ -268,7 +312,6 @@ export default {
         if (!valid) return this.$message.error('参数不符合要求，请重新输入')
         const { data: res } = await this.$http.put(`user/${this.userInfo.id}`, { username: this.userInfo.username, role: this.userInfo.role })
         if (res.status !== 200) {
-          this.editUservisible = false
           return this.$message.error(res.message)
         }
         this.$message.success('用户更新成功')

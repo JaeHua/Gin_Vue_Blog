@@ -14,7 +14,8 @@ import {
   Tag,
   ConfigProvider,
   Modal,
-  Select
+  Select,
+  Switch
 } from 'ant-design-vue'
 message.config({
   top: '100px',
@@ -38,3 +39,4 @@ Vue.use(Tag)
 Vue.use(ConfigProvider)
 Vue.use(Modal)
 Vue.use(Select)
+Vue.use(Switch)
