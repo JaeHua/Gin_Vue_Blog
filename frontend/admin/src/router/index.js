@@ -26,6 +26,7 @@ const routes = [
       { path: 'index', component: Index },
       { path: 'artlist', component: ArtList },
       { path: 'addart', component: AddArt },
+      { path: 'addart/:id', component: AddArt, props: true },
       { path: 'catelist', component: CateList },
       { path: 'userlist', component: UserList }
     ]

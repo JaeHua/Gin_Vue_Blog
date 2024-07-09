@@ -1,9 +1,11 @@
 // src/axios.js
 import axios from 'axios'
+import Vue from 'vue'
 
+const URL = 'http://localhost:3000/api/v1'
 // 创建一个 axios 实例
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/v1', // 替换为你的 API 基础 URL
+  baseURL: URL, // 替换为你的 API 基础 URL
   timeout: 10000
 })
 
@@ -20,5 +22,6 @@ instance.interceptors.request.use(
     return Promise.reject(error)
   }
 )
+Vue.prototype.$http = instance
 
-export default instance
+export default URL

@@ -6,6 +6,9 @@
           <a-col :span="6">
             <a-input-search allowClear v-model="queryParam.title" placeholder="输入文章标题进行搜索" enter-button  @change="getArtlist" />
           </a-col>
+          <a-col :span="4">
+            <a-button  type="primary" @click="$router.push('addart')">新增</a-button>
+          </a-col>
           <a-col :span="6" :offset="1">
             <a-select  firstActiveValue defaultValue="选择分类" @change="Catechange" style="width: 120px;">
               <a-select-option :value="''">全部分类</a-select-option>
@@ -29,7 +32,7 @@
 
         <template slot="action" slot-scope="data">
           <div class="actionSlot">
-            <a-button type="primary" icon="edit" @click="editArt(data.ID)" style="margin-right: 20px;">编辑</a-button>
+            <a-button type="primary" icon="edit" @click="$router.push(`addart/${data.ID}`)" style="margin-right: 20px;">编辑</a-button>
             <a-button type="danger" icon="delete" @click="deleteArt(data.ID)" style="margin-right: 20px;">删除</a-button>
           </div>
         </template>
