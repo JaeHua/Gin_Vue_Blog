@@ -137,12 +137,7 @@ export default {
       // console.log(res)
     },
     async getCatelist () {
-      const { data: res } = await this.$http.get('category', {
-        params: {
-          pagesize: this.queryParam.pagesize,
-          pagenum: this.queryParam.pagenum
-        }
-      })
+      const { data: res } = await this.$http.get('category')
       if (res.status !== 200) {
         this.$message.error(res.message)
         return
