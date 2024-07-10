@@ -45,13 +45,13 @@ func GetArt(title string, pageSize int, pageNum int) ([]Article, int, int) {
 	var total int64
 
 	if title == "" {
-		err = DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+		err = DB.Order("Updated_At DESC").Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Printf("Error finding articles: %v", err)
 			return nil, errmsg.ERROR, int(total)
 		}
 	} else {
-		err = DB.Preload("Category").Where("title LIKE ?", title+"%").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
+		err = DB.Order("Updated_At DESC").Preload("Category").Where("title LIKE ?", title+"%").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arts).Error
 		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Printf("Error finding articles: %v", err)
 			return nil, errmsg.ERROR, int(total)
