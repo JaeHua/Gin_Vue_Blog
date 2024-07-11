@@ -31,7 +31,7 @@
           </template>
         </a-form-model-item>
         <a-form-model-item label="文章内容" prop="content">
-            <a-input type="textarea" v-model="artInfo.content"></a-input>
+          <Editor v-model="artInfo.content"></Editor>
         </a-form-model-item>
         <a-form-model-item>
             <a-button type="danger" style="margin-right: 15px;" @click="artOk(artInfo.id)">{{id?'更新':'提交'}}</a-button>
@@ -42,8 +42,11 @@
 </div>
 </template>
 <script>
+
 import URL from '@/plugin/axios'
+import Editor from '../editor/index'
 export default {
+  components: { Editor },
   props: ['id'],
   data () {
     return {
@@ -87,6 +90,7 @@ export default {
       }
       this.artInfo = res.data
       this.artInfo.id = res.data.ID
+      this.artInfo.content = res.data.content
     },
     // 获取分类列表
     async getCatelist () {
