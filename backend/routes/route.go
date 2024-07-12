@@ -15,6 +15,13 @@ func InitRoute() {
 	r.Use(middleware.Logger())
 	r.Use(gin.Recovery())
 	r.Use(middleware.Cors())
+	//托管静态资源
+	r.LoadHTMLGlob("static/admin/index.html")
+	r.Static("admin/static", "static/admin/static")
+	r.StaticFile("admin/favicon.icon", "static/admin/favicon.ico")
+	r.GET("admin", func(c *gin.Context) {
+		c.HTML(200, "index.html", nil)
+	})
 	auth := r.Group("api/v1")
 	auth.Use(middleware.JwtToken())
 	{
