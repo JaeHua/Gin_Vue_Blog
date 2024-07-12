@@ -22,6 +22,7 @@ func InitRoute() {
 	r.GET("admin", func(c *gin.Context) {
 		c.HTML(200, "index.html", nil)
 	})
+
 	auth := r.Group("api/v1")
 	auth.Use(middleware.JwtToken())
 	{
