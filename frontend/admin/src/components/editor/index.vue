@@ -1,7 +1,7 @@
 <template>
     <div id="editor">
         <!-- @imgDel="imgDel" -->
-      <mavon-editor v-model="content" ref="md" >
+      <mavon-editor v-model="content" ref="md" @imgAdd="$imgAdd">
         <template v-slot:left-toolbar-before>
           <button
             type="button"
@@ -70,8 +70,17 @@ export default {
 
       const $vm = this.$refs.md
       $vm.insertText($vm.getTextareaDom(), insertText)
+    },
+    $imgAdd (pos, file) {
+      // 单图上传
+      const imgData = new FormData()
+      imgData.append('file', file)
+      this.$http.post('/upload', imgData).then(res => {
+        if (res.data.status !== 200) { return this.$message.console.error('图片上传失败') }
+        this.$message.success('图片上传成功')
+        this.$refs.md.$img2Url(pos, res.data.url)
+      })
     }
-
   }
 }
 </script>

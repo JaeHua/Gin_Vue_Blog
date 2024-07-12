@@ -143,6 +143,9 @@ export default {
     },
     addCancel () {
       this.$refs.artInfoRef.resetFields()
+      if (this.id) {
+        this.$router.push('/admin/artlist')
+      }
     }
   }
 }
