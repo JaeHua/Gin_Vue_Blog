@@ -136,7 +136,7 @@ export default {
           if (res.status !== 200) {
             return this.$message.error(res.message)
           }
-          this.$router.push('/admin/artlist')
+          this.$router.push('/artlist')
           this.$message.success('文章更新成功')
         }
       })
@@ -144,7 +144,7 @@ export default {
     addCancel () {
       this.$refs.artInfoRef.resetFields()
       if (this.id) {
-        this.$router.push('/admin/artlist')
+        this.$router.push('/artlist')
       }
     }
   }
