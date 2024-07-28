@@ -23,7 +23,7 @@ func InitDB() {
 	//禁用默认表名的复数形式
 	db.SingularTable(true)
 	//迁移数据库
-	db.AutoMigrate(&User{}, &Article{}, &Category{})
+	db.AutoMigrate(&User{}, &Article{}, &Category{}, &Profile{})
 
 	//sets max connecting nums
 	db.DB().SetMaxIdleConns(10)

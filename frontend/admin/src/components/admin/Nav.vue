@@ -15,6 +15,7 @@
         </a-sub-menu>
         <a-menu-item key="catelist"><a-icon type="book" /><span>分类列表</span></a-menu-item>
         <a-menu-item key="userlist"><a-icon type="user" /><span>用户列表</span></a-menu-item>
+        <a-menu-item key="profile"><a-icon type="setting" /><span>用户设置</span></a-menu-item>
       </a-menu>
     </a-layout-sider>
   </template>

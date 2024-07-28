@@ -3,10 +3,12 @@
     <v-app-bar app color="primary" flat>
         <!-- logo -->
 
-        <v-avatar size="40" color="white"></v-avatar>
+        <v-avatar class="mx-12" size="40" color="white">
+          <v-img src="../assets/logo.png" alt=""></v-img>
+        </v-avatar>
 
         <v-container class="py-0 fill-height">
-            <v-btn  text color="white">首页</v-btn>
+            <v-btn @click="$router.push('/')" text color="white">首页</v-btn>
             <v-btn v-for="item in cateList" :key="item.id" text color="white">{{item.name}}</v-btn>
         </v-container>
         <v-spacer></v-spacer>

@@ -41,6 +41,8 @@ func InitRoute() {
 		auth.DELETE("article/:id", v1.DeleteArt)
 		//上传文件
 		auth.POST("upload", v1.UpLoad)
+		//更新信息
+		auth.PUT("profile/:id", v1.UpdateProfile)
 	}
 	public := r.Group("api/v1")
 	{
@@ -53,6 +55,7 @@ func InitRoute() {
 		public.GET("article/info/:id", v1.GetArtInfo)
 		public.GET("category/article/:id", v1.GetCateArt)
 		public.POST("login", v1.Login)
+		public.GET("profile/:id", v1.GetProfile)
 	}
 	err := r.Run(utils.HttpPort)
 	if err != nil {
