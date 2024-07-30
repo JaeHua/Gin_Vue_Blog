@@ -1,14 +1,19 @@
 <template>
   <v-app app>
     <TopBar></TopBar>
-    <v-main class="grey lighten-3">
-      <v-container>
+    <v-main class="white lighten-3">
+      <v-container fluid class="full">
         <v-row>
-          <v-col cols="3">
-            <Nav></Nav>
+          <v-col cols="12">
+            <v-sheet min-height="50vh" rounded="lg" class="pa-0">
+              <Nav></Nav>
+            </v-sheet>
           </v-col>
-          <v-col>
-            <v-sheet min-height="80vh" rounded="lg">
+        </v-row>
+        <v-divider class="mt-10"></v-divider>
+        <v-row justify="center" >
+          <v-col cols="12" md="8">
+            <v-sheet min-height="50vh" rounded="lg" class="pa-5 ">
               <router-view></router-view>
             </v-sheet>
           </v-col>
@@ -23,7 +28,20 @@
 import TopBar from '../components/TopBar'
 import Footer from '../components/Footer'
 import Nav from '../components/Nav'
+
 export default {
   components: { TopBar, Footer, Nav }
 }
 </script>
+
+<style scoped>
+.full{
+  height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.v-main {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+</style>
