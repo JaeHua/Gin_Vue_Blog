@@ -13,7 +13,7 @@
           </v-col>
         </v-card-title>
         <div class="headerinfo">
-          <p>{{ profileInfo.desc }}</p>
+          <p class="desc">{{ profileInfo.desc }}</p>
         </div>
 
         <div class="icon-container">
@@ -39,6 +39,7 @@
       </v-img>
 
     </v-card>
+
   </div>
 </template>
 
@@ -160,4 +161,33 @@ export default {
 .arrow:hover  {
   animation: zoomIn 0.3s forwards; /* 0.3秒的动画，向前播放 */
 }
+.desc {
+      font-family: 'Pacifico', cursive;
+      font-size: 24px;
+      color: #f7f4f4;
+      text-align: center;
+      animation: fadeIn 2s ease-in-out, moveUpDown 3s infinite alternate, colorChange 5s infinite alternate;
+      text-shadow: 2px 2px 6px rgba(255, 0, 0, 0.7),
+                   -2px -2px 6px rgba(0, 255, 0, 0.7),
+                   2px -2px 6px rgba(0, 0, 255, 0.7),
+                   -2px 2px 6px rgba(255, 255, 0, 0.7);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes moveUpDown {
+      from { transform: translateY(10px); }
+      to { transform: translateY(-10px); }
+    }
+
+    @keyframes colorChange {
+      0% { color: #f7f4f4; }
+      25% { color: #ff99c8; }
+      50% { color: #fcf6bd; }
+      75% { color: #d0f4de; }
+      100% { color: #a9def9; }
+    }
 </style>

@@ -5,7 +5,8 @@
         rounded="lg"
         outlined
         v-for="(item, index) in ArtList"
-        :key="item.id"
+        :key="item.ID"
+        @click="$router.push(`detail/${item.ID}`)"
       >
         <v-row no-gutters>
           <v-col :cols="6" :class="index % 2 === 0 ? 'image-col' : 'content-col'">
@@ -54,6 +55,9 @@
           </v-col>
         </v-row>
       </v-card>
+      <div class="text-center">
+      <v-pagination   :total-visible="7" v-model="queryParam.pagenum" :length="Math.ceil(this.total/queryParam.pagesize)" @input="getArtList()"></v-pagination>
+    </div>
     </v-col>
   </template>
 
