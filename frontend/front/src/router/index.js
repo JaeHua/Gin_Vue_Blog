@@ -4,6 +4,7 @@ import HomeView from '../views/Home.vue'
 import ArtList from '../components/ArtList.vue'
 import Detail from '../components/Details.vue'
 import Category from '../components/Category.vue'
+import Result from '../components/Result.vue'
 Vue.use(VueRouter)
 const routes =
 [{
@@ -24,6 +25,10 @@ const routes =
     component: Category,
     meta: { title: '文章分类页' },
     props: true
+  }, {
+    path: '/result',
+    component: Result,
+    meta: { title: '文章搜索页' }
   }]
 
 }]

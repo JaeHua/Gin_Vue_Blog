@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import { Modal } from 'ant-design-vue'
 const columns = [
   {
     title: 'ID',
@@ -236,19 +237,25 @@ export default {
     },
     // 删除用户
     deleteUser (id) {
-      this.$confirm({
+      Modal.confirm({
         title: '提示:确定删除该用户吗?',
         content: '一旦删除，无法恢复',
         onOk: async () => {
-          const { data: res } = await this.$http.delete(`user/${id}`)
-          console.log(res)
-          if (res.status !== 200) {
-            this.$message.error(res.message)
+          try {
+            const { data: res } = await this.$http.delete(`user/${id}`)
+            if (res.status !== 200) {
+              this.$message.error(res.message)
+            } else {
+              this.$message.success('删除成功')
+              this.getUserlist()
+            }
+          } catch (error) {
+            this.$message.error('请求失败')
+            console.error(error)
           }
-          this.$message.success('删除成功')
-          this.getUserlist()
         },
-        onCancel: async () => {
+        onCancel: () => {
+          // 取消删除时的处理逻辑
           this.$message.info('已取消删除')
         }
       })

@@ -1,12 +1,13 @@
 <template>
-    <v-col>
+    <v-col >
       <v-card
-        class="ma-3 mb-7 article-card"
+        class="ma-3 mx-15 mb-7 article-card"
         rounded="lg"
         outlined
         v-for="(item, index) in ArtList"
         :key="item.ID"
-        @click="$router.push(`detail/${item.ID}`)"
+        @click="$router.push(`/detail/${item.ID}`)"
+
       >
         <v-row no-gutters>
           <v-col :cols="6" :class="index % 2 === 0 ? 'image-col' : 'content-col'">
@@ -55,7 +56,7 @@
           </v-col>
         </v-row>
       </v-card>
-      <div class="text-center">
+      <div class="text-center" v-if="this.total">
       <v-pagination   :total-visible="7" v-model="queryParam.pagenum" :length="Math.ceil(this.total/queryParam.pagesize)" @input="getArtList()"></v-pagination>
     </div>
     </v-col>
@@ -96,7 +97,7 @@ export default {
 </script>
 
   <style scoped>
-  .v-col {
+  .vcol {
     display: flex;
     justify-content: center; /* Center children horizontally */
 
@@ -105,7 +106,7 @@ export default {
   .article-card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
-    width: 100%;
+    width: 85%;
   }
   .article-card:hover {
     transform: translateY(-5px);

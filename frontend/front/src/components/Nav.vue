@@ -20,16 +20,16 @@
           <div class="circle">
             <v-icon class="arrow">{{'mdi-arrow-left'}}</v-icon>
           </div>
-          <div class="circle">
-            <v-icon class="qqchat">{{ 'mdi-qqchat' }}</v-icon>
+          <div class="circle" @click="navigateTo('qq')">
+            <v-icon class="qqchat" >{{ 'mdi-qqchat' }}</v-icon>
           </div>
-          <div class="circle">
+          <div class="circle" @click="navigateTo('github')">
             <v-icon class="github">{{ 'mdi-github' }}</v-icon>
           </div>
-          <div class="circle">
+          <div class="circle"  @click="navigateTo('email')">
             <v-icon class="email">{{'mdi-email'}}</v-icon>
           </div>
-          <div class="circle">
+          <div class="circle" @click="navigateTo('signal')">
             <v-icon class="signal">{{'mdi-signal-variant'}}</v-icon>
           </div>
           <div class="circle">
@@ -50,7 +50,32 @@ export default {
       profileInfo: {
         id: 1
       },
-      colors: ['blue', 'red', 'green']
+      colors: ['blue', 'red', 'green'],
+      hash: {
+        'qq.com': 'http://mail.qq.com',
+        'gmail.com': 'http://mail.google.com',
+        'sina.com': 'http://mail.sina.com.cn',
+        '163.com': 'http://mail.163.com',
+        '126.com': 'http://mail.126.com',
+        'yeah.net': 'http://www.yeah.net/',
+        'sohu.com': 'http://mail.sohu.com/',
+        'tom.com': 'http://mail.tom.com/',
+        'sogou.com': 'http://mail.sogou.com/',
+        '139.com': 'http://mail.10086.cn/',
+        'hotmail.com': 'http://www.hotmail.com',
+        'live.com': 'http://login.live.com/',
+        'live.cn': 'http://login.live.cn/',
+        'live.com.cn': 'http://login.live.com.cn',
+        '189.com': 'http://webmail16.189.cn/webmail/',
+        'yahoo.com.cn': 'http://mail.cn.yahoo.com/',
+        'yahoo.cn': 'http://mail.cn.yahoo.com/',
+        'eyou.com': 'http://www.eyou.com/',
+        '21cn.com': 'http://mail.21cn.com/',
+        '188.com': 'http://www.188.com/',
+        'foxmail.com': 'http://www.foxmail.com',
+        'outlook.com': 'http://www.outlook.com'
+      },
+      eemail: ''
     }
   },
   created () {
@@ -62,6 +87,26 @@ export default {
       const { data: res } = await this.$http.get(`profile/${this.profileInfo.id}`)
       this.profileInfo = res.data
       console.log(this.profileInfo)
+    },
+    navigateTo (target) {
+      switch (target) {
+        case 'qq':
+          window.location.href = `https://user.qzone.qq.com/${this.profileInfo.qqchat}`
+          break
+        case 'github':
+          window.location.href = `https://github.com/${this.profileInfo.github}`
+          break
+        case 'signal':
+          window.location.href = this.profileInfo.site
+          break
+        case 'email':
+          this.eemail = this.profileInfo.email.split('@')[1] // 获取邮箱域
+          console.log(this.eemail)
+          window.location.href = `${this.hash[this.eemail]}/${this.profileInfo.email.split('@')[0]}`
+          break
+        default:
+          break
+      }
     }
   },
   computed: {
@@ -85,7 +130,6 @@ export default {
   letter-spacing: 0;
   line-height: 30px;
 }
-
 .icon-container {
   display: flex; /* 使用Flexbox布局 */
   gap: 10px; /* 图标之间的间距 */
@@ -190,4 +234,5 @@ export default {
       75% { color: #d0f4de; }
       100% { color: #a9def9; }
     }
+
 </style>

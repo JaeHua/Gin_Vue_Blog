@@ -161,7 +161,6 @@
   max-height: auto;
   margin-left: 25%;
 }
-/* 代码块 */
 pre {
   position: relative;
   background: #21252b;
@@ -195,16 +194,35 @@ code, kbd, samp {
   font-family: monospace, monospace;
   font-size: 1.8em;
 }
+
 .theme--light.v-application code {
-  background: transparent !important; /* 强制设置背景为透明 */
-  color: inherit !important; /* 强制继承颜色 */
+  background: transparent !important;
+  color: inherit !important;
 }
+
 code {
   border-radius: 3px;
   padding: 0.2em 0.4em;
   margin: 0;
   font-size: 100%;
-  background: transparent; /* 添加这行来移除背景颜色 */
+  background: transparent;
+}
+
+.copy-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #61dafb;
+  border: none;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.copy-button:hover {
+  background: #21a1f1;
 }
 .markdown-body table {
   width: 100%;

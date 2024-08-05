@@ -3,7 +3,7 @@
     <TopBar></TopBar>
     <v-main class="white lighten-3">
       <v-container fluid class="full">
-        <v-row v-if="!isDetailPage">
+        <v-row v-if="!isDetailPage ">
           <v-col cols="12">
             <v-sheet min-height="50vh" rounded="lg" class="pa-0">
               <Nav></Nav>
@@ -37,7 +37,7 @@ export default {
   components: { TopBar, Footer, Nav },
   computed: {
     isDetailPage () {
-      return this.$route.path.startsWith('/detail/')
+      return this.$route.path !== '/'
     }
   }
 }

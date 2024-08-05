@@ -57,6 +57,8 @@
   </template>
 
 <script>
+import { Modal } from 'ant-design-vue'
+
 const columns = [
   {
     title: 'ID',
@@ -162,7 +164,7 @@ export default {
     },
     // 删除分类
     deleteCate (id) {
-      this.$confirm({
+      Modal.confirm({
         title: '提示:确定删除该分类吗?',
         content: '一旦删除，无法恢复',
         onOk: async () => {

@@ -9,12 +9,24 @@
 
         <v-container class="py-0 fill-height">
             <v-btn @click="$router.push('/')" text color="white">首页</v-btn>
-            <v-btn v-for="item in cateList" :key="item.id" text color="white" @click="$router.push(`Category/${item.ID}`)">{{item.name}}</v-btn>
+            <v-btn v-for="item in cateList" :key="item.id" text color="white" @click="$router.push(`/category/${item.id}`)">{{item.name}}</v-btn>
         </v-container>
         <v-spacer></v-spacer>
-                   <v-responsive max-width color="white">
-            <v-text-field dense flat hide-details rounded dark solo-inverted     append-icon="mdi-magnify">
-      </v-text-field>
+    <v-responsive max-width color="white">
+      <v-text-field
+      ref="searchField"
+      dense
+      flat
+      hide-details
+      rounded
+      dark
+      solo-inverted
+      append-icon="mdi-magnify"
+      @click:append="goToResult"
+      @keyup.enter="goToResult"
+      v-model="searchQuery"
+      placeholder="Search..."
+    ></v-text-field>
     </v-responsive>
     </v-app-bar>
 </div>
@@ -24,7 +36,8 @@
 export default {
   data () {
     return {
-      cateList: []
+      cateList: [],
+      searchQuery: ''
     }
   },
   created () {
@@ -38,6 +51,16 @@ export default {
     },
     gobackend () {
       window.location.href = 'http://localhost:3000/admin'
+    },
+    goToResult () {
+      const query = this.searchQuery.trim()
+      if (query) {
+        const currentQuery = this.$route.query.q
+        if (currentQuery !== query) {
+          this.$router.push({ path: '/result', query: { q: query } })
+          this.searchQuery = '' // 清空输入框
+        }
+      }
     }
   }
 }

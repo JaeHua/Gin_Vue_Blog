@@ -1,6 +1,6 @@
 <template>
     <a-layout-sider breakpoint="lg" v-model="collapsed">
-      <div class="log">
+      <div class="log" @click="navigateToBlog">
         <span>{{collapsed?'Blog':'My Blog'}}</span>
       </div>
       <a-menu theme="dark" mode="inline" @click="goToPage">
@@ -30,6 +30,9 @@ export default {
     goToPage (item) {
       // 连续点击菜单就不会报错了(catch了)
       this.$router.push('/' + item.key).catch(err => err)
+    },
+    navigateToBlog () {
+      window.location.href = 'http://localhost:8080/'
     }
   }
 }

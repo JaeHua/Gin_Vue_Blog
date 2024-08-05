@@ -42,6 +42,8 @@
   </template>
 
 <script>
+import { Modal } from 'ant-design-vue'
+
 const columns = [
   {
     title: 'ID',
@@ -165,9 +167,9 @@ export default {
       this.pagination = pager
       this.getArtlist()
     },
-    // 删除用户
+    // 删除文章
     deleteArt (id) {
-      this.$confirm({
+      Modal.confirm({
         title: '提示:确定删除该文章吗?',
         content: '一旦删除，无法恢复',
         onOk: async () => {
