@@ -19,14 +19,19 @@
             :ishljs="true"
             box-shadow-style="0 0 0 0 rgba(0,0,0,0)"
             previewBackground="white"
+            ref="markdown"
           ></mavonEditor>
         </div>
       </div>
     </div>
+    <v-snackbar v-model="showSnackbar"  variant="outlined" color="success"  :timeout="3000" top>
+      复制成功
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+import Clipboard from 'clipboard'
 import { mavonEditor } from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 export default {
@@ -47,7 +52,9 @@ export default {
           // 这是你的markdown css文件路径
           return '/markdown/markdown.css'
         }
-      }
+      },
+      tocs: [],
+      showSnackbar: false
     }
   },
   created () {
@@ -57,6 +64,45 @@ export default {
     async getArt () {
       const { data: res } = await this.$http(`article/info/${this.id}`)
       this.article = res.data
+      this.addCopyBtn()
+    },
+    // 动态添加复制按钮以及复制方法（获取到文档content成功的时候调用此方法）
+    addCopyBtn () {
+      const that = this
+      this.$nextTick(() => {
+        const content = document.getElementsByClassName('v-show-content')[0]
+        const precodes = content.getElementsByTagName('pre')
+        const arr = Array.from(precodes)
+        arr.forEach((element, index) => {
+          const btn = document.createElement('div')
+          btn.setAttribute('class', 'code-copy')
+          btn.addEventListener('click', function (e) {
+            const code = e.target.parentElement.children[0] // code 标签
+            const codeText = code.innerText
+            // 复制函数
+            that.shareCopy(codeText)
+          })
+          element.appendChild(btn)
+        })
+      })
+    },
+    // 复制代码函数
+    shareCopy (codeText) {
+      // const that = this
+      const clipboard = new Clipboard('.code-copy', {
+        text: function () {
+          return codeText
+        }
+      })
+      clipboard.on('success', e => {
+      // 复制成功
+        this.showSnackbar = true
+        clipboard.destroy()
+      })
+      clipboard.on('error', e => {
+      // 复制失败
+        clipboard.destroy()
+      })
     }
   }
 }
@@ -101,4 +147,5 @@ export default {
 ::v-deep code.hljs {
   background-color: #151618 !important;
 }
+
 </style>

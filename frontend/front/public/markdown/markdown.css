@@ -157,9 +157,10 @@
 }
 
 .markdown-body img {
+  margin: 5px 5px 5px 5px;
   max-width: 100%;
   max-height: auto;
-  margin-left: 25%;
+  border: 2px solid black;
 }
 pre {
   position: relative;
@@ -188,6 +189,29 @@ pre:before {
   top: 12px;
   box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
   z-index: 2;
+}
+.code-copy {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  border: none;
+  font-size: 18px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.code-copy:hover {
+  background: #417cb8;
+  color: #e1e1e1;
+}
+
+.code-copy::before {
+  content: '📋'; /* 使用 Unicode 表情符号 */
+  margin-right: 5px;
 }
 
 code, kbd, samp {
