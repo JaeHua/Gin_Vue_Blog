@@ -24,9 +24,16 @@
         </div>
       </div>
     </div>
-    <v-snackbar v-model="showSnackbar"  variant="outlined" color="success"  :timeout="3000" top>
+    <v-snackbar v-model="showSnackbar" variant="outlined" color="success" :timeout="3000" top>
       复制成功
     </v-snackbar>
+    <div class="toc-navigation">
+      <ul>
+        <li v-for="toc in tocs" :key="toc.id" @click="jumpToToc(toc)" :style="{ paddingLeft: (toc.level - 2) * 20 + 'px' }">
+          {{ toc.title }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -34,6 +41,8 @@
 import Clipboard from 'clipboard'
 import { mavonEditor } from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+import { scrollToToc } from '../plugins/catalog.js'
+
 export default {
   props: ['id'],
   components: { mavonEditor },
@@ -49,24 +58,28 @@ export default {
       codeStyle: 'atom-one-dark',
       externalLink: {
         markdown_css: function () {
-          // 这是你的markdown css文件路径
           return '/markdown/markdown.css'
         }
       },
       tocs: [],
-      showSnackbar: false
+      showSnackbar: false,
+      activeToc: null
     }
   },
   created () {
     this.getArt()
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
     async getArt () {
       const { data: res } = await this.$http(`article/info/${this.id}`)
       this.article = res.data
       this.addCopyBtn()
+      this.extractTocs()
     },
-    // 动态添加复制按钮以及复制方法（获取到文档content成功的时候调用此方法）
     addCopyBtn () {
       const that = this
       this.$nextTick(() => {
@@ -77,54 +90,76 @@ export default {
           const btn = document.createElement('div')
           btn.setAttribute('class', 'code-copy')
           btn.addEventListener('click', function (e) {
-            const code = e.target.parentElement.children[0] // code 标签
+            const code = e.target.parentElement.children[0]
             const codeText = code.innerText
-            // 复制函数
             that.shareCopy(codeText)
           })
           element.appendChild(btn)
         })
       })
     },
-    // 复制代码函数
     shareCopy (codeText) {
-      // const that = this
       const clipboard = new Clipboard('.code-copy', {
         text: function () {
           return codeText
         }
       })
       clipboard.on('success', e => {
-      // 复制成功
         this.showSnackbar = true
         clipboard.destroy()
       })
       clipboard.on('error', e => {
-      // 复制失败
         clipboard.destroy()
       })
+    },
+    extractTocs () {
+      this.$nextTick(() => {
+        const headers = this.$refs.markdown.$el.querySelectorAll('h2, h3, h4')
+        const tocList = Array.from(headers).map(header => {
+          const id = header.id || header.textContent.trim().replace(/\s+/g, '-')
+          header.id = id
+          return {
+            id: id,
+            title: header.textContent,
+            level: parseInt(header.tagName.charAt(1)) // 获取级别
+          }
+        })
+        this.tocs = tocList.slice(0, Math.ceil(tocList.length / 2)) // 截取一半的目录
+      })
+    },
+    jumpToToc (toc) {
+      this.activeToc = toc.id
+      scrollToToc(toc)
+    },
+    handleScroll () {
+      const toc = document.querySelector('.toc-navigation')
+      if (window.scrollY > 400) {
+        toc.style.top = '120px'
+      } else {
+        toc.style.top = '500px'
+      }
     }
+
   }
 }
 </script>
-
 <style scoped>
 .bg {
   width: 100%;
   height: 400px;
   margin: 0;
   padding: 0;
-  object-fit: cover; /* 确保图片完全覆盖容器 */
+  object-fit: cover;
 }
 .article-content {
   max-width: 800px;
   margin: 0 auto;
-  border-radius: 8px; /* 添加圆角 */
+  border-radius: 8px;
 }
 .article-title {
   font-size: 2.5em;
-  color: #333; /* 标题使用深色 */
-  text-align: center; /* 居中显示 */
+  color: #333;
+  text-align: center;
 }
 .article-desc {
   color: #797979;
@@ -138,14 +173,37 @@ export default {
   line-height: 1.6;
   color: #797979;
 }
-/* 使用深度选择器 */
 ::v-deep .hljs {
   background-color: #151618 !important;
 }
-
 ::v-deep pre.hljs,
 ::v-deep code.hljs {
   background-color: #151618 !important;
 }
-
+.toc-navigation {
+  position: fixed;
+  top: 500px;
+  right: 10px;
+  padding: 15px;
+  border-radius: 10px;
+  border-left: 3px solid #007bff;
+  transition: top 0.3s, box-shadow 0.3s;
+}
+.toc-navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.toc-navigation li {
+  cursor: pointer;
+  margin: 10px 0;
+  color: #007bff;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  transition: color 0.3s, transform 0.3s;
+}
+.toc-navigation li:hover {
+  color: #0056b3;
+  transform: translateX(5px);
+}
 </style>
