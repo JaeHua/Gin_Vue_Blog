@@ -34,7 +34,7 @@ export default {
       this.timeRunning = `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`
     },
     typeEffect () {
-      const text = `${this.currentYear} — JiangBlog\n网站已运行 ${this.timeRunning}`
+      const text = `${this.currentYear} — MyBlog\n网站已运行 ${this.timeRunning}`
       let index = 0
       const textElement = this.$refs.textElement
       textElement.innerHTML = ''

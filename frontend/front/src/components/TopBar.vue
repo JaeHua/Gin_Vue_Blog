@@ -28,6 +28,97 @@
       placeholder="Search..."
     ></v-text-field>
     </v-responsive>
+    <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <v-avatar v-bind="attrs" v-on="on" class="ml-4" size="40" color="white">
+            <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
+        </template>
+        <v-list>
+          <v-list-item v-if="!loggedIn" @click="loginDialog = true">
+            <v-list-item-title>登录</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="!loggedIn" @click="registerDialog = true">
+            <v-list-item-title>注册</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="loggedIn" @click="goToAccount">
+            <v-list-item-title>我的空间</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="loggedIn" @click="logout">
+            <v-list-item-title>退出登录</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
+      <!-- Login Dialog -->
+      <v-dialog v-model="loginDialog" max-width="400">
+        <v-card>
+          <v-card-title class="headline">登录</v-card-title>
+          <v-card-text>
+            <v-text-field
+              label="用户名"
+              v-model="userL.username"
+              prepend-icon="mdi-account-tie"
+              :rules="[rules.required, rules.maxLength]"
+            ></v-text-field>
+            <v-text-field
+              label="密码"
+              v-model="userL.password"
+              prepend-icon="mdi-lock"
+              type="password"
+              :rules="[rules.required, rules.maxLength]"
+            ></v-text-field>
+            <v-btn block color="primary" @click="login">登录</v-btn>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text @click="clearForm()">关闭</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <!-- Register Dialog -->
+      <v-dialog v-model="registerDialog" max-width="400">
+        <v-card>
+          <v-card-title class="headline">注册</v-card-title>
+          <v-card-text>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-text-field
+              label="用户名"
+              v-model="user.username"
+              prepend-icon="mdi-account-tie"
+               :rules="[rules.required, rules.maxLength]"
+            ></v-text-field>
+            <v-text-field
+              label="邮箱"
+              v-model="email"
+              prepend-icon="mdi-email"
+              type="email"
+               :rules="[rules.required]"
+            ></v-text-field>
+            <v-text-field
+              label="密码"
+              v-model="user.password"
+              prepend-icon="mdi-lock"
+              type="password"
+               :rules="[rules.required, rules.maxLength]"
+            ></v-text-field>
+            <v-text-field
+              label="确认密码"
+              v-model="confirmPassword"
+              prepend-icon="mdi-lock"
+              type="password"
+              :rules="[rules.required, rules.maxLength, rules.matchPassword]"
+            ></v-text-field>
+            <v-btn block color="secondary" @click="register" :disabled="!valid">注册</v-btn>
+          </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text @click="clearForm()">关闭</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-app-bar>
 </div>
 </template>
@@ -37,7 +128,28 @@ export default {
   data () {
     return {
       cateList: [],
-      searchQuery: ''
+      searchQuery: '',
+      loginDialog: false,
+      registerDialog: false,
+      email: '',
+      loggedIn: false,
+      confirmPassword: '',
+      user: {
+        username: '',
+        password: '',
+        role: 2
+      },
+      userL: {
+        username: '',
+        password: '',
+        role: 2
+      },
+      valid: false,
+      rules: {
+        required: value => !!value || '不能为空',
+        maxLength: value => value.length <= 20 || '不能超过20个字符',
+        matchPassword: value => value === this.user.password || '两次密码必须一致'
+      }
     }
   },
   created () {
@@ -61,7 +173,57 @@ export default {
           this.searchQuery = '' // 清空输入框
         }
       }
+    },
+    clearForm () {
+      this.registerDialog = false
+      this.user.username = ''
+      this.user.password = ''
+      this.email = ''
+      this.confirmPassword = ''
+      this.loginDialog = false
+      this.userL.username = ''
+      this.userL.password = ''
+    },
+    async register () {
+      if (this.$refs.form.validate()) {
+        const { data: res } = await this.$http.post('user/add', this.user)
+        if (res.status !== 200) {
+          this.registerDialog = false
+
+          return this.$toast.error(res.message, {
+            timeout: 3000
+          })
+        }
+        this.registerDialog = false
+        return this.$toast.success('注册成功', {
+          timeout: 3000
+        })
+      }
+    },
+    async login () {
+      const { data: res } = await this.$http.post('login', this.userL)
+      if (res.status !== 200) {
+        this.loginDialog = false
+
+        return this.$toast.error(res.message, {
+          timeout: 3000
+        })
+      }
+      this.loginDialog = false
+      window.sessionStorage.setItem('token', res.token)
+      this.loggedIn = true
+      return this.$toast.success('登陆成功', {
+        timeout: 3000
+      })
+    },
+    logout () {
+      window.sessionStorage.removeItem('token')
+      this.loggedIn = false
+      this.$toast.success('已退出登录', {
+        timeout: 3000
+      })
     }
+
   }
 }
 </script>
