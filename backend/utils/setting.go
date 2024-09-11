@@ -20,6 +20,8 @@ var (
 	SecreteKey  string
 	Bucket      string
 	QiniuServer string
+	RdHost      string
+	RdPort      string
 )
 
 // 初始化
@@ -32,6 +34,7 @@ func init() {
 	LoadServe(file)
 	LoadDatabase(file)
 	LoadQiNiu(file)
+	LoadRedis(file)
 }
 
 func LoadServe(file *ini.File) {
@@ -55,4 +58,9 @@ func LoadQiNiu(file *ini.File) {
 	Bucket = file.Section("qiniu").Key("Bucket").String()
 	QiniuServer = file.Section("qiniu").Key("QiniuServer").String()
 
+}
+
+func LoadRedis(file *ini.File) {
+	RdHost = file.Section("redis").Key("RdHost").String()
+	RdPort = file.Section("redis").Key("RdPort").String()
 }

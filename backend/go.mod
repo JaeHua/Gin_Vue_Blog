@@ -10,6 +10,8 @@ require (
 
 require (
 	github.com/gin-contrib/cors v1.7.2 // indirect
+	github.com/go-redis/redis v6.15.9+incompatible // indirect
+	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible // indirect
 	github.com/lestrrat-go/strftime v1.0.6 // indirect
 	github.com/pkg/errors v0.9.1 // indirect

@@ -21,6 +21,12 @@ const (
 	//code=3000...分类模块的错误
 	ERROR_CATEGORY_USED  = 3001
 	ERROR_CATE_NOT_EXIST = 3002
+
+	//code=4000...验证模块错误
+	ERROR_VCODE_SEND    = 4001
+	ERROR_VCODE_STORE   = 4002
+	ERROR_VCODE_WRONG   = 4003
+	ERROR_VCODE_EXPIRED = 4004
 )
 
 var codemsg = map[int]string{
@@ -38,6 +44,10 @@ var codemsg = map[int]string{
 	ERROR_CATEGORY_USED:    "该分类已存在",
 	ERROR_ART_NOT_EXIST:    "文章不存在",
 	ERROR_CATE_NOT_EXIST:   "分类不存在",
+	ERROR_VCODE_SEND:       "验证码发送失败",
+	ERROR_VCODE_STORE:      "验证码存储失败",
+	ERROR_VCODE_WRONG:      "验证码错误",
+	ERROR_VCODE_EXPIRED:    "验证码失效",
 }
 
 func GetErrMsg(code int) string {

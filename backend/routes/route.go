@@ -56,6 +56,8 @@ func InitRoute() {
 		public.GET("category/article/:id", v1.GetCateArt)
 		public.POST("login", v1.Login)
 		public.GET("profile/:id", v1.GetProfile)
+		public.POST("register/getcode", v1.GetValidateCode)
+		public.POST("register/verify", v1.ValidateEmailCode)
 	}
 	err := r.Run(utils.HttpPort)
 	if err != nil {

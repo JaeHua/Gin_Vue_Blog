@@ -31,13 +31,16 @@ func AddUser(c *gin.Context) {
 		return
 	}
 	code = model.CheckUser(data.Username)
-
 	//成功才写入数据库
+	if code == errmsg.ERROR_USERNAME_USED {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  code,
+			"message": errmsg.GetErrMsg(code),
+		})
+		return
+	}
 	if code == errmsg.SUCCESS {
 		model.CreateUser(&data)
-	}
-	if code == errmsg.ERROR_USERNAME_USED {
-		code = errmsg.ERROR_USERNAME_USED
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,

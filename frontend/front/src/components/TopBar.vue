@@ -110,6 +110,23 @@
               type="password"
               :rules="[rules.required, rules.maxLength, rules.matchPassword]"
             ></v-text-field>
+            <v-row>
+          <v-col>
+            <v-text-field
+              label="验证码"
+              v-model="verificationCode"
+              prepend-icon="mdi-shield-check"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn
+              :disabled="timer > 0 || !valid"
+              @click="sendVerificationCode"
+            >
+              {{ timer > 0 ? `重新发送 (${timer})` : '发送验证码' }}
+            </v-btn>
+          </v-col>
+        </v-row>
             <v-btn block color="secondary" @click="register" :disabled="!valid">注册</v-btn>
           </v-form>
           </v-card-text>
@@ -134,6 +151,7 @@ export default {
       email: '',
       loggedIn: false,
       confirmPassword: '',
+      verificationCode: '',
       user: {
         username: '',
         password: '',
@@ -145,6 +163,7 @@ export default {
         role: 2
       },
       valid: false,
+      timer: 0,
       rules: {
         required: value => !!value || '不能为空',
         maxLength: value => value.length <= 20 || '不能超过20个字符',
@@ -156,6 +175,24 @@ export default {
     this.GetCateList()
   },
   methods: {
+    async sendVerificationCode () {
+      this.startTimer()
+      const Qemial = { mail: this.email }
+      const { data: res } = await this.$http.post('register/getcode', Qemial)
+      console.log(res)
+      return this.$toast.success('验证码发送成功', {
+        timeout: 3000
+      })
+    },
+    startTimer () {
+      this.timer = 60
+      const interval = setInterval(() => {
+        this.timer--
+        if (this.timer <= 0) {
+          clearInterval(interval)
+        }
+      }, 1000)
+    },
     // 获取分类
     async GetCateList () {
       const { data: res } = await this.$http.get('category')
@@ -186,18 +223,25 @@ export default {
     },
     async register () {
       if (this.$refs.form.validate()) {
+        // 先验证验证码
+        const { data: codeRes } = await this.$http.post('register/verify', {
+          mail: this.email,
+          vcode: this.verificationCode
+        })
+
+        if (codeRes.status !== 200) {
+          return this.$toast.error(codeRes.message, { timeout: 3000 })
+        }
+
+        // 验证通过后，再进行用户注册
         const { data: res } = await this.$http.post('user/add', this.user)
         if (res.status !== 200) {
           this.registerDialog = false
-
-          return this.$toast.error(res.message, {
-            timeout: 3000
-          })
+          return this.$toast.error(res.message, { timeout: 3000 })
         }
+
         this.registerDialog = false
-        return this.$toast.success('注册成功', {
-          timeout: 3000
-        })
+        return this.$toast.success('注册成功', { timeout: 3000 })
       }
     },
     async login () {
