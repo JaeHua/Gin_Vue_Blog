@@ -15,9 +15,9 @@
             <a-input style="width: 200px;" v-model="profileInfo.qq" :value="profileInfo.qq"></a-input>
         </a-form-model-item>
 
-        <a-form-model-item label="邮箱" >
+        <!-- <a-form-model-item label="邮箱" >
             <a-input style="width: 200px;" v-model="profileInfo.email" :value="profileInfo.email"></a-input>
-        </a-form-model-item>
+        </a-form-model-item> -->
 
         <a-form-model-item label="技术网站" >
             <a-input style="width: 300px;"  v-model="profileInfo.site" :value="profileInfo.site"></a-input>
@@ -74,11 +74,10 @@ export default {
   data () {
     return {
       profileInfo: {
-        id: 1,
         name: '',
         qq: '',
         desc: '',
-        email: '',
+        email: 'jaelele@163.com',
         site: '',
         img: '',
         github: '',
@@ -95,7 +94,7 @@ export default {
   methods: {
     // 获取用户信息
     async getProfileInfo () {
-      const { data: res } = await this.$http.get(`profile/${this.profileInfo.id}`)
+      const { data: res } = await this.$http.get(`profile/${this.profileInfo.email}`)
       if (res.status !== 200) {
         return this.$message.error(res.message)
       }

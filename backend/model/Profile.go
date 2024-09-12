@@ -16,10 +16,20 @@ type Profile struct {
 	Avatar string `gorm:"type:varchar(200)" json:"avatar"`
 }
 
+// CreateProfile 创建用户信息
+func CreateProfile(data *Profile) int {
+	//加密操作
+	err := DB.Create(&data).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCESS
+}
+
 // GetProfile 获取个人信息
-func GetProfile(id int) (Profile, int) {
+func GetProfile(email string) (Profile, int) {
 	var profile Profile
-	err = DB.Where("ID=?", id).First(&profile).Error
+	err = DB.Where("email=?", email).First(&profile).Error
 	if err != nil {
 		return profile, errmsg.ERROR
 	}
@@ -27,7 +37,7 @@ func GetProfile(id int) (Profile, int) {
 }
 
 // UpdateProfile 更新个人信息
-func UpdateProfile(id int, data *Profile) int {
+func UpdateProfile(email string, data *Profile) int {
 	var profile1 Profile
 	var updates = make(map[string]interface{})
 
@@ -40,9 +50,9 @@ func UpdateProfile(id int, data *Profile) int {
 	if data.Desc != "" {
 		updates["desc"] = data.Desc
 	}
-	if data.Email != "" {
-		updates["email"] = data.Email
-	}
+	//if data.Email != "" {
+	//	updates["email"] = data.Email
+	//}
 	if data.Site != "" {
 		updates["site"] = data.Site
 	}
@@ -55,7 +65,7 @@ func UpdateProfile(id int, data *Profile) int {
 	if data.Avatar != "" {
 		updates["avatar"] = data.Avatar
 	}
-	err = DB.Model(&profile1).Where("ID=?", 1).Updates(updates).Error
+	err = DB.Model(&profile1).Where("email=?", email).Updates(updates).Error
 	if err != nil {
 		return errmsg.ERROR
 	}

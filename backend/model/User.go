@@ -13,11 +13,12 @@ type User struct {
 	gorm.Model
 	Username string `gorm:"type:varchar(20);not null" json:"username" validate:"required,min=4,max=12" label:"用户名"`
 	Password string `gorm:"type:varchar(20);not null" json:"password" validate:"required,min=6,max=20" label:"密码"`
+	Email    string `gorm:"type:varchar(200)" json:"email"`
 	Role     int    `gorm:"type:int;DEFAULT:2" json:"role" validate:"required,gte=2" label:"角色码"`
 }
 
 // CheckUser 查询用户
-func CheckUser(name string) (code int) {
+func CheckUser(name string, email string) (code int) {
 	var users User
 	if DB == nil {
 		log.Println("Database is not initialized")
@@ -27,6 +28,11 @@ func CheckUser(name string) (code int) {
 	if users.ID > 0 {
 		return errmsg.ERROR_USERNAME_USED
 	}
+	DB.Select("id").Where("email=?", email).First(&users)
+	if users.ID > 0 {
+		return errmsg.ERROR_USERNAME_EMAIL_USED
+	}
+
 	return errmsg.SUCCESS
 
 }
@@ -158,9 +164,9 @@ func CheckLogin(username string, password string) int {
 	}
 	return errmsg.SUCCESS
 }
-func UserCheckLogin(username string, password string) int {
+func UserCheckLogin(email string, password string) int {
 	var user User
-	DB.Where("username=?", username).First(&user)
+	DB.Where("email=?", email).First(&user)
 	if user.ID == 0 {
 		return errmsg.ERROR_USER_NOT_EXIST
 	}

@@ -30,7 +30,7 @@ func UserLogin(c *gin.Context) {
 	var code int
 	var token string
 	_ = c.ShouldBindJSON(&data)
-	code = model.UserCheckLogin(data.Username, data.Password)
+	code = model.UserCheckLogin(data.Email, data.Password)
 
 	if code == errmsg.SUCCESS {
 		token, code = middleware.SetToken(data.Username)

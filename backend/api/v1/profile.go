@@ -6,13 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 func GetProfile(c *gin.Context) {
-	id, _ := strconv.Atoi(c.Param("id"))
-
-	data, code := model.GetProfile(id)
+	//id, _ := strconv.Atoi(c.Param("id"))
+	email := c.Param("email")
+	data, code := model.GetProfile(email)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
@@ -21,11 +20,12 @@ func GetProfile(c *gin.Context) {
 
 func UpdateProfile(c *gin.Context) {
 	var data model.Profile
-	id, _ := strconv.Atoi(c.Param("id"))
+	//id, _ := strconv.Atoi(c.Param("id"))
+	email := c.Param("email")
 
 	_ = c.ShouldBindJSON(&data)
 	log.Println(data)
-	code = model.UpdateProfile(id, &data)
+	code = model.UpdateProfile(email, &data)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"message": errmsg.GetErrMsg(code),

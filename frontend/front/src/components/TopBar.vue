@@ -56,8 +56,8 @@
           <v-card-title class="headline">登录</v-card-title>
           <v-card-text>
             <v-text-field
-              label="用户名"
-              v-model="userL.username"
+              label="邮箱"
+              v-model="userL.email"
               prepend-icon="mdi-account-tie"
               :rules="[rules.required, rules.maxLength]"
             ></v-text-field>
@@ -91,7 +91,7 @@
             ></v-text-field>
             <v-text-field
               label="邮箱"
-              v-model="email"
+              v-model="user.email"
               prepend-icon="mdi-email"
               type="email"
                :rules="[rules.required]"
@@ -148,17 +148,17 @@ export default {
       searchQuery: '',
       loginDialog: false,
       registerDialog: false,
-      email: '',
       loggedIn: false,
       confirmPassword: '',
       verificationCode: '',
       user: {
         username: '',
+        email: '',
         password: '',
         role: 2
       },
       userL: {
-        username: '',
+        email: '',
         password: '',
         role: 2
       },
@@ -181,12 +181,17 @@ export default {
   methods: {
     async sendVerificationCode () {
       this.startTimer()
-      const Qemial = { mail: this.email }
+      const Qemial = { mail: this.user.email }
       const { data: res } = await this.$http.post('register/getcode', Qemial)
       console.log(res)
       return this.$toast.success('验证码发送成功', {
         timeout: 3000
       })
+    },
+    async getProfileInfo () {
+      const { data: res } = await this.$http.get(`profile/${this.profileInfo.id}`)
+      this.profileInfo = res.data
+      // console.log(this.profileInfo)
     },
     startTimer () {
       this.timer = 60
@@ -219,7 +224,8 @@ export default {
       this.registerDialog = false
       this.user.username = ''
       this.user.password = ''
-      this.email = ''
+      this.user.email = ''
+      this.userL.email = ''
       this.confirmPassword = ''
       this.loginDialog = false
       this.userL.username = ''
@@ -229,7 +235,7 @@ export default {
       if (this.$refs.form.validate()) {
         // 先验证验证码
         const { data: codeRes } = await this.$http.post('register/verify', {
-          mail: this.email,
+          mail: this.user.email,
           vcode: this.verificationCode
         })
 

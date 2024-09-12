@@ -65,11 +65,10 @@ router.beforeEach((to, from, next) => {
           const decoded = jwtdecode.jwtDecode(token)
           const currentTime = Date.now() / 1000
 
-          console.log('Decoded Token:', decoded)
-          console.log('Current Time:', currentTime)
-
           if (decoded.exp < currentTime) {
             window.sessionStorage.removeItem('token')
+            document.title = '欢迎来到我的博客'
+
             next({ name: 'home' })
           } else {
             next()
@@ -77,9 +76,12 @@ router.beforeEach((to, from, next) => {
         } catch (e) {
           console.error('Token decoding error:', e)
           window.sessionStorage.removeItem('token')
+          document.title = '欢迎来到我的博客'
+
           next({ name: 'home' })
         }
       } else {
+        document.title = '欢迎来到我的博客'
         next({ name: 'home' })
       }
     } else {

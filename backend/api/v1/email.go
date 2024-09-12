@@ -54,8 +54,10 @@ func ValidateEmailCode(c *gin.Context) {
 	vCode := em.VCode
 	// 获取存储在redis中的验证码
 	key := strings.Split("vCode"+em.Mail, "@")
-	log.Println(key[0])
+	//log.Println(key[0])
 	rdVCode := rd.Db.Get(key[0]).Val()
+	//log.Println("vcode" + vCode)
+	//log.Println("edvcode" + rdVCode)
 	if rdVCode != "" && vCode == rdVCode {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  200,

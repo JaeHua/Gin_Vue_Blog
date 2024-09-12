@@ -14,11 +14,12 @@ var code int
 // AddUser 添加用户
 func AddUser(c *gin.Context) {
 	var data model.User
-
+	var profile model.Profile
 	var msg string
 	var validCode int
 	_ = c.ShouldBindJSON(&data)
-
+	profile.Name = data.Username
+	profile.Email = data.Email
 	msg, validCode = validator.Validate(&data)
 	if validCode != errmsg.SUCCESS {
 		c.JSON(
@@ -30,7 +31,7 @@ func AddUser(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	code = model.CheckUser(data.Username)
+	code = model.CheckUser(data.Username, data.Email)
 	//成功才写入数据库
 	if code == errmsg.ERROR_USERNAME_USED {
 		c.JSON(http.StatusOK, gin.H{
@@ -41,6 +42,7 @@ func AddUser(c *gin.Context) {
 	}
 	if code == errmsg.SUCCESS {
 		model.CreateUser(&data)
+		model.CreateProfile(&profile)
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,

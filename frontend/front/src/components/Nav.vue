@@ -48,7 +48,7 @@ export default {
   data () {
     return {
       profileInfo: {
-        id: 1
+        email: 'jaelele@163.com'
       },
       colors: ['blue', 'red', 'green'],
       hash: {
@@ -84,9 +84,9 @@ export default {
   methods: {
     // 个人设置
     async getProfileInfo () {
-      const { data: res } = await this.$http.get(`profile/${this.profileInfo.id}`)
+      const { data: res } = await this.$http.get(`profile/${this.profileInfo.email}`)
       this.profileInfo = res.data
-      console.log(this.profileInfo)
+      // console.log(this.profileInfo)
     },
     navigateTo (target) {
       switch (target) {
