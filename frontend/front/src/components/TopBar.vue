@@ -41,7 +41,7 @@
           <v-list-item v-if="!loggedIn" @click="registerDialog = true">
             <v-list-item-title>注册</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="loggedIn" @click="goToAccount">
+          <v-list-item v-if="loggedIn" @click="$router.push('/account')">
             <v-list-item-title>我的空间</v-list-item-title>
           </v-list-item>
           <v-list-item v-if="loggedIn" @click="logout">
@@ -173,6 +173,10 @@ export default {
   },
   created () {
     this.GetCateList()
+    const token = window.sessionStorage.getItem('token')
+    if (token) {
+      this.loggedIn = true
+    }
   },
   methods: {
     async sendVerificationCode () {
@@ -245,7 +249,7 @@ export default {
       }
     },
     async login () {
-      const { data: res } = await this.$http.post('login', this.userL)
+      const { data: res } = await this.$http.post('userlogin', this.userL)
       if (res.status !== 200) {
         this.loginDialog = false
 
@@ -267,7 +271,6 @@ export default {
         timeout: 3000
       })
     }
-
   }
 }
 </script>

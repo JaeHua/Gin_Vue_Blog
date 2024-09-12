@@ -55,6 +55,7 @@ func InitRoute() {
 		public.GET("article/info/:id", v1.GetArtInfo)
 		public.GET("category/article/:id", v1.GetCateArt)
 		public.POST("login", v1.Login)
+		public.POST("userlogin", v1.UserLogin)
 		public.GET("profile/:id", v1.GetProfile)
 		public.POST("register/getcode", v1.GetValidateCode)
 		public.POST("register/verify", v1.ValidateEmailCode)

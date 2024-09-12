@@ -5,7 +5,7 @@ import ArtList from '../components/ArtList.vue'
 import Detail from '../components/Details.vue'
 import Category from '../components/Category.vue'
 import Result from '../components/Result.vue'
-import Register from '@/components/Register.vue'
+import Account from '@/components/Account.vue'
 Vue.use(VueRouter)
 const routes =
 [{
@@ -30,12 +30,13 @@ const routes =
     path: '/result',
     component: Result,
     meta: { title: '文章搜索页' }
-  }, {
-    path: '/register',
-    component: Register,
-    meta: { title: '注册界面' }
   }]
 
+}, {
+  path: '/account',
+  name: 'account',
+  component: Account,
+  meta: { title: '用户空间' }
 }]
 
 const router = new VueRouter({ mode: 'history', base: process.env.BASE_URL, routes })
