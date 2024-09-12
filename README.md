@@ -3,7 +3,9 @@
 
 
 <p align="center">
-  <img src="https://github.com/JaeHua/Gin_Vue_Blog/assets/126366914/479f17fa-40db-44d6-a082-f1f2e22d07a7" alt="blog (1)">
+  <img src="https://github.com/user-attachments/assets/525aa5f1-df2d-4d26-9ff2-2cb3cb13de22" alt="blog (1)">
+
+
 </p>
 
 <p align="center">
