@@ -151,4 +151,5 @@ GinVueBlog
 - Ant Design Vue
 - Axios 网络请求
 - Vue Router 路由
+- Vuex 状态管理
 - so on
