@@ -44,11 +44,13 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
       profileInfo: {
-        email: 'jaelele@163.com'
+        email: 'NO_NEED_TO_CHANGE'
       },
       colors: ['blue', 'red', 'green'],
       hash: {
@@ -78,12 +80,19 @@ export default {
       eemail: ''
     }
   },
+  computed: {
+    ...mapState(['ID_email']),
+    ...mapGetters(['isLoggedIn']),
+    descArray () {
+      return String(this.profileInfo.desc).split('_')
+    }
+  },
   created () {
-    this.getProfileInfo()
+    this.getAuthProfileInfo()
   },
   methods: {
     // 个人设置
-    async getProfileInfo () {
+    async getAuthProfileInfo () {
       const { data: res } = await this.$http.get(`profile/${this.profileInfo.email}`)
       this.profileInfo = res.data
       // console.log(this.profileInfo)
@@ -108,12 +117,8 @@ export default {
           break
       }
     }
-  },
-  computed: {
-    descArray () {
-      return String(this.profileInfo.desc).split('_')
-    }
   }
+
 }
 </script>
 

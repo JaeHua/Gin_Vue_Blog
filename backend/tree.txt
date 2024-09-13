@@ -1,0 +1,36 @@
+卷 Data 的文件夹 PATH 列表
+卷序列号为 8A81-E686
+D:.
+├─.idea
+├─api
+│  └─v1
+├─config
+├─log
+├─middleware
+├─model
+├─routes
+├─static
+│  ├─admin
+│  │  └─static
+│  │      ├─css
+│  │      ├─fonts
+│  │      ├─img
+│  │      └─js
+│  ├─admin1
+│  │  └─static
+│  │      ├─css
+│  │      ├─fonts
+│  │      ├─img
+│  │      └─js
+│  └─admin2
+│      └─static
+│          ├─css
+│          ├─fonts
+│          ├─img
+│          └─js
+├─upload
+├─utils
+│  ├─email
+│  ├─errmsg
+│  └─validator
+└─web

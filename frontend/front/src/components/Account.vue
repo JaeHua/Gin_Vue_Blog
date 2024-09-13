@@ -10,10 +10,12 @@
         <v-list>
           <v-list-item>
             <v-list-item-avatar>
-              <img src="https://randomuser.me/api/portraits/men/85.jpg" alt="User Avatar">
+              <!-- <img v-if="!profileInfo.avatar" src="https://randomuser.me/api/portraits/men/85.jpg" alt="User" > -->
+            <img  :src="profileInfo.avatar" alt="">
+
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title class="white--text">John Doe</v-list-item-title>
+              <v-list-item-title class="white--text">{{ this.profileInfo.name }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -52,14 +54,6 @@
         <v-spacer></v-spacer>
 
         <v-list dense nav>
-          <v-list-item @click="logout">
-            <v-list-item-icon>
-              <v-icon>mdi-logout</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>退出登录</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
 
           <v-list-item @click="$router.push('/')">
             <v-list-item-icon>
@@ -84,12 +78,15 @@
 import UserSettings from '@/components/UserSettings.vue'
 import LikedArticles from '@/components/LikedArticles.vue'
 import SavedArticles from '@/components/SavedArticles.vue'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'YourComponentName',
   data () {
     return {
-      currentView: 'settings'
+      currentView: 'settings',
+      profileInfo: {
+      }
     }
   },
   computed: {
@@ -103,15 +100,27 @@ export default {
         default:
           return UserSettings
       }
+    },
+    ...mapState(['ID_email']),
+    ...mapGetters(['isLoggedIn', 'getProfile'])
+  },
+  created () {
+    const token = window.sessionStorage.getItem('token')
+    const email = window.sessionStorage.getItem('email')
+    if (token) {
+      // 刷新页面会改变vuex状态，需要mock
+      this._login(email)
     }
+    console.log(this.ID_email)
+    this.getProfileInfo()
+    console.log(this.profileInfo)
   },
   methods: {
-    logout () {
-      window.sessionStorage.removeItem('token')
-      this.$router.push('/')
-      this.$toast.success('已退出登录', {
-        timeout: 3000
-      })
+    ...mapActions(['_login', '_logout']),
+    async getProfileInfo () {
+      const { data: res } = await this.$http.get(`profile/${this.ID_email}`)
+      this.profileInfo = res.data
+      // console.log(this.profileInfo)
     }
   }
 }
