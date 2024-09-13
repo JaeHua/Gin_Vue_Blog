@@ -21,6 +21,39 @@
 Gin_Vue_Blog 是一个博客项目，采用前后端分离架构。后端使用 Go 语言的 Gin 框架，前端采用 Vue.js。该项目旨在提供一个简单而强大的博客系统，支持基本的博客功能，如文章发布、编辑、删除以及评论功能，现在还在开发中......
 
 ## 项目结构
+Backend
+├─api
+│  └─v1
+├─config
+├─log
+├─middleware
+├─model
+├─routes
+├─static
+│  ├─admin
+│  │  └─static
+│  │      ├─css
+│  │      ├─fonts
+│  │      ├─img
+│  │      └─js
+│  ├─admin1
+│  │  └─static
+│  │      ├─css
+│  │      ├─fonts
+│  │      ├─img
+│  │      └─js
+│  └─admin2
+│      └─static
+│          ├─css
+│          ├─fonts
+│          ├─img
+│          └─js
+├─upload
+├─utils
+│  ├─email
+│  ├─errmsg
+│  └─validator
+└─web
 
 ## 后端技术
 - Golang 
