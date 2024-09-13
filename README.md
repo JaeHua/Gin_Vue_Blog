@@ -110,7 +110,9 @@ GinVueBlog
             │  
             ├─assets
             │  └─css
-            │          
+            │
+            ├─store
+            │      index.js
             ├─components
             │      404.vue
             │      Account.vue
