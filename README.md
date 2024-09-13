@@ -22,39 +22,172 @@ Gin_Vue_Blog 是一个博客项目，采用前后端分离架构。后端使用 
 
 ## 项目结构
 ```
-Backend
-├─api
-│  └─v1
-├─config
-├─log
-├─middleware
-├─model
-├─routes
-├─static
-│  ├─admin
-│  │  └─static
-│  │      ├─css
-│  │      ├─fonts
-│  │      ├─img
-│  │      └─js
-│  ├─admin1
-│  │  └─static
-│  │      ├─css
-│  │      ├─fonts
-│  │      ├─img
-│  │      └─js
-│  └─admin2
-│      └─static
-│          ├─css
-│          ├─fonts
-│          ├─img
-│          └─js
-├─upload
-├─utils
-│  ├─email
-│  ├─errmsg
-│  └─validator
-└─web
+卷 Data 的文件夹 PATH 列表
+卷序列号为 8A81-E686
+GinVueBlog
+│  
+├─backend
+│  │  backend.exe
+│  │  go.mod
+│  │  go.sum
+│  │  main.go
+│  │  
+│  ├─.idea
+│  │      .gitignore
+│  │      backend.iml
+│  │      modules.xml
+│  │      vcs.xml
+│  │      
+│  ├─api
+│  │  └─v1
+│  │          article.go
+│  │          category.go
+│  │          email.go
+│  │          login.go
+│  │          profile.go
+│  │          upload.go
+│  │          user.go
+│  │          
+│  ├─config
+│  │      config.ini
+│  │      
+│  ├─middleware
+│  │      cors.go
+│  │      jwt.go
+│  │      log.go
+│  │      
+│  ├─model
+│  │      Article.go
+│  │      Category.go
+│  │      db.go
+│  │      Email.go
+│  │      Profile.go
+│  │      redis.go
+│  │      Upload.go
+│  │      User.go
+│  │      
+│  ├─routes
+│  │      route.go
+│  │      
+│  ├─static
+│  │  ├─admin
+│  │  │  │  favicon.ico
+│  │  │  │  index.html
+│  │  │  │  
+│  │  │  └─static
+│  │  │      ├─css   
+│  │  │      ├─fonts  
+│  │  │      ├─img    
+│  │  │      └─js       
+│  └─utils
+│      │  setting.go
+│      │  
+│      ├─email
+│      │      email.go
+│      │      
+│      ├─errmsg
+│      │      errmsg.go
+│      │      
+│      └─validator
+│              validator.go
+│              
+└─frontend
+    ├─admin
+    │  ├─public
+    │  │      favicon.ico
+    │  │      index.html
+    │  │      
+    │  └─src
+    │      │  App.vue
+    │      │  main.js
+    │      │  
+    │      ├─assets
+    │      │  │  logo.png
+    │      │  │  
+    │      │  └─css
+    │      │          style.css
+    │      │          
+    │      ├─components
+    │      │  ├─admin
+    │      │  │      Footer.vue
+    │      │  │      Header.vue
+    │      │  │      Index.vue
+    │      │  │      Nav.vue
+    │      │  │      
+    │      │  ├─article
+    │      │  │      AddArt.vue
+    │      │  │      ArtList.vue
+    │      │  │      
+    │      │  ├─category
+    │      │  │      CateList.vue
+    │      │  │      
+    │      │  ├─editor
+    │      │  │      index.vue
+    │      │  │      
+    │      │  └─user
+    │      │          Profile.vue
+    │      │          UserList.vue
+    │      │          
+    │      ├─plugin
+    │      │      antui.js
+    │      │      axios.js
+    │      │      
+    │      ├─router
+    │      │      index.js
+    │      │      
+    │      └─views
+    │              Admin.vue
+    │              Login.vue
+    │              
+    └─front
+        ├─public
+        │  │  favicon.ico
+        │  │  index.html
+        │  │  
+        │  └─markdown
+        │          markdown.css
+        │          
+        └─src
+            │  App.vue
+            │  main.js
+            │  
+            ├─assets
+            │  │  404.jpg
+            │  │  biaozhi1.png
+            │  │  imgBg.jpg
+            │  │  logo.png
+            │  │  logo.svg
+            │  │  
+            │  └─css
+            │          style.css
+            │          
+            ├─components
+            │      404.vue
+            │      Account.vue
+            │      ArtList.vue
+            │      Category.vue
+            │      Details.vue
+            │      Footer.vue
+            │      LikedArticles.vue
+            │      Nav.vue
+            │      Register.vue
+            │      Result.vue
+            │      SavedArticles.vue
+            │      TopBar.vue
+            │      UserSettings.vue
+            │      
+            ├─plugins
+            │      catalog.js
+            │      http.js
+            │      vuetify.js
+            │      
+            ├─router
+            │      index.js
+            │      
+            └─views
+                    Home.vue
+                    
+
 ```
 ## 后端技术
 - Golang 
