@@ -24,9 +24,7 @@
         </div>
       </div>
     </div>
-    <v-snackbar v-model="showSnackbar" variant="outlined" color="success" :timeout="3000" top>
-      复制成功
-    </v-snackbar>
+
     <div class="toc-navigation">
       <ul>
         <li v-for="toc in tocs" :key="toc.id" @click="jumpToToc(toc)" :style="{ paddingLeft: (toc.level - 2) * 20 + 'px' }">
@@ -62,7 +60,6 @@ export default {
         }
       },
       tocs: [],
-      showSnackbar: false,
       activeToc: null
     }
   },
@@ -105,7 +102,9 @@ export default {
         }
       })
       clipboard.on('success', e => {
-        this.showSnackbar = true
+        this.$toast.success('复制成功', {
+          timeout: 1000
+        })
         clipboard.destroy()
       })
       clipboard.on('error', e => {
