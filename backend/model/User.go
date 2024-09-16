@@ -129,6 +129,13 @@ func ScryptPw(password string) string {
 // DeleteUser 删除用户信息
 func DeleteUser(id int) int {
 	var user User
+	var user1 User
+	var profile Profile
+	_ = DB.Select("email").Where("id=?", id).First(&user1).Error
+	err1 := DB.Where("email=?", user1.Email).Delete(&profile).Error
+	if err1 != nil {
+		return errmsg.ERROR
+	}
 	err := DB.Where("id=?", id).Delete(&user).Error
 	if err != nil {
 		return errmsg.ERROR

@@ -43,6 +43,8 @@ func InitRoute() {
 		auth.POST("upload", v1.UpLoad)
 		//更新信息
 		auth.PUT("profile/:id", v1.UpdateProfile)
+		auth.GET("user/info", v1.Info)
+
 	}
 	public := r.Group("api/v1")
 	{
@@ -59,6 +61,7 @@ func InitRoute() {
 		public.GET("profile/:email", v1.GetProfile)
 		public.POST("register/getcode", v1.GetValidateCode)
 		public.POST("register/verify", v1.ValidateEmailCode)
+		public.POST("register", v1.UserRegister)
 	}
 	err := r.Run(utils.HttpPort)
 	if err != nil {

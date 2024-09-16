@@ -77,7 +77,7 @@ export default {
         name: '',
         qq: '',
         desc: '',
-        email: 'jaelele@163.com',
+        email: 'admin',
         site: '',
         img: '',
         github: '',

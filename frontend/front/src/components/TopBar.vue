@@ -144,7 +144,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-
+import emailService from '@/service/emailService'
 export default {
   data () {
     return {
@@ -197,16 +197,11 @@ export default {
       const { data: res } = await this.$http.get(`profile/${this.ID_email}`)
       this.profileInfo = res.data
     },
-    async sendVerificationCode () {
-      this.startTimer()
-      const Qemial = { mail: this.user.email }
-      const { data: res } = await this.$http.post('register/getcode', Qemial)
-      console.log(res)
-      return this.$toast.success('验证码发送成功', {
-        timeout: 3000
-      })
+    // 发送验证码
+    sendVerificationCode () {
+      emailService.sendVerifyCode({ mail: this.user.email })
     },
-
+    // 计时器
     startTimer () {
       this.timer = 60
       const interval = setInterval(() => {
@@ -246,21 +241,13 @@ export default {
     },
     async register () {
       if (this.$refs.form.validate()) {
-        const { data: codeRes } = await this.$http.post('register/verify', {
-          mail: this.user.email,
-          vcode: this.verificationCode
-        })
-
-        if (codeRes.status !== 200) {
-          return this.$toast.error(codeRes.message, { timeout: 3000 })
-        }
-
-        const { data: res } = await this.$http.post('user/add', this.user)
+        const isVerified = await emailService.VerifyCode({ mail: this.user.email, vcode: this.verificationCode })
+        if (!isVerified) { return }// 验证失败，不继续执行后续注册流程
+        const res = await this.$store.dispatch('userModule/register', { username: this.user.username, email: this.user.email, password: this.user.password })
         if (res.status !== 200) {
           this.registerDialog = false
           return this.$toast.error(res.message, { timeout: 3000 })
         }
-
         this.registerDialog = false
         return this.$toast.success('注册成功', { timeout: 3000 })
       }

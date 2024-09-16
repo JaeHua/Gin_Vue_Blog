@@ -50,7 +50,7 @@ export default {
   data () {
     return {
       profileInfo: {
-        email: 'NO_NEED_TO_CHANGE'
+        email: 'admin'
       },
       colors: ['blue', 'red', 'green'],
       hash: {
@@ -110,7 +110,6 @@ export default {
           break
         case 'email':
           this.eemail = this.profileInfo.email.split('@')[1] // 获取邮箱域
-          console.log(this.eemail)
           window.location.href = `${this.hash[this.eemail]}/${this.profileInfo.email.split('@')[0]}`
           break
         default:

@@ -171,7 +171,7 @@ export default {
           const { data: res } = await this.$http.delete(`category/${id}`)
           console.log(res)
           if (res.status !== 200) {
-            this.$message.error(res.message)
+            return this.$message.error(res.message)
           }
           this.$message.success('删除成功')
           this.getCatelist()

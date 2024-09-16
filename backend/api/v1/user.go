@@ -122,3 +122,12 @@ func ResetUserInfo(c *gin.Context) {
 		"message": errmsg.GetErrMsg(code),
 	})
 }
+
+// Info 使用用户的信息获取
+func Info(c *gin.Context) {
+	profile, _ := c.Get("profile")
+	c.JSON(http.StatusOK, gin.H{
+		"status": errmsg.SUCCESS,
+		"data":   profile,
+	})
+}

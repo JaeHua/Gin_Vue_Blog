@@ -26,7 +26,7 @@ func CreateProfile(data *Profile) int {
 	return errmsg.SUCCESS
 }
 
-// GetProfile 获取个人信息
+// GetProfile 获取管理员信息
 func GetProfile(email string) (Profile, int) {
 	var profile Profile
 	err = DB.Where("email=?", email).First(&profile).Error

@@ -48,6 +48,9 @@
       <a-form-model-item label="用户名" prop="username">
         <a-input v-model="newUserInfo.username"></a-input>
       </a-form-model-item>
+      <a-form-model-item label="邮箱" prop="email">
+        <a-input v-model="newUserInfo.email"></a-input>
+      </a-form-model-item>
       <a-form-model-item hasFeedback label="密码" prop="password">
         <a-input-password  v-model="newUserInfo.password"></a-input-password>
       </a-form-model-item>
@@ -142,6 +145,7 @@ export default {
       newUserInfo: {
         id: 0,
         username: '',
+        email: '',
         password: '',
         checkpass: '',
         role: 2
@@ -241,27 +245,21 @@ export default {
         title: '提示:确定删除该用户吗?',
         content: '一旦删除，无法恢复',
         onOk: async () => {
-          try {
-            const { data: res } = await this.$http.delete(`user/${id}`)
-            if (res.status !== 200) {
-              this.$message.error(res.message)
-            } else {
-              this.$message.success('删除成功')
-              this.getUserlist()
-            }
-          } catch (error) {
-            this.$message.error('请求失败')
-            console.error(error)
+          const { data: res } = await this.$http.delete(`user/${id}`)
+          console.log(res) // Log the response to verify structure
+          if (res.status !== 200) {
+            return this.$message.error(res.message)
           }
+          this.$message.success('删除成功')
+          await this.getUserlist() // Await the user list refresh
         },
         onCancel: () => {
-          // 取消删除时的处理逻辑
           this.$message.info('已取消删除')
         }
       })
     },
     resetUser (id) {
-      this.$confirm({
+      Modal.confirm({
         title: '提示:确定重置密码?',
         content: '一旦重置，无法恢复',
         onOk: async () => {
@@ -283,7 +281,7 @@ export default {
       this.$refs.userRef.validate(async (valid) => {
         if (!valid) return this.$message.error('参数不符合要求，请重新输入')
 
-        const { data: res } = await this.$http.post('user/add', { username: this.newUserInfo.username, password: this.newUserInfo.password, role: this.newUserInfo.role })
+        const { data: res } = await this.$http.post('user/add', { username: this.newUserInfo.username, email: this.newUserInfo.email, password: this.newUserInfo.password, role: this.newUserInfo.role })
         this.$message.success('用户添加成功')
         if (res.status !== 200) {
           return this.$message.error(res.message)

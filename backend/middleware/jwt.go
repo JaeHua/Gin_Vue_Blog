@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"backend/model"
 	"backend/utils"
 	"backend/utils/errmsg"
 	"github.com/dgrijalva/jwt-go"
@@ -13,15 +14,15 @@ import (
 var JwtKey = []byte(utils.JwtKey)
 
 type MyClaims struct {
-	Username string `json:"username"`
+	Email string `json:"email"`
 	jwt.StandardClaims
 }
 
 // SetToken 生成token
-func SetToken(username string) (string, int) {
+func SetToken(email string) (string, int) {
 	expiredTime := time.Now().Add(10 * time.Hour)
 	SetClaims := MyClaims{
-		username,
+		email,
 		jwt.StandardClaims{
 			ExpiresAt: expiredTime.Unix(),
 			Issuer:    "goblog",
@@ -87,9 +88,22 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+		userEmail := key.Email
+		DB := model.GetDB()
+		var profile model.Profile
+		DB.Where("email=?", userEmail).First(&profile)
 
+		//用户被消除了
+		if profile.ID == 0 {
+			code = errmsg.ERROR_USER_NO_RIGHT
+			c.JSON(http.StatusOK, gin.H{
+				"status":  code,
+				"message": errmsg.GetErrMsg(code),
+			})
+			return
+		}
 		//存入上下文
-		c.Set("username", key.Username)
+		c.Set("profile", profile)
 		c.Next()
 	}
 }
