@@ -34,22 +34,22 @@
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-avatar v-bind="attrs" v-on="on" class="ml-4" size="40" color="white">
-            <v-icon v-if="!profileInfo.avatar">mdi-account-circle</v-icon>
-            <img v-else :src="profileInfo.avatar" alt="">
+            <v-icon v-if="!userInfo?.avatar">mdi-account-circle</v-icon>
+            <img v-else :src="userInfo?.avatar" alt="">
 
           </v-avatar>
         </template>
-        <v-list>
-          <v-list-item v-if="!isLoggedIn" @click="loginDialog = true">
+         <v-list>
+          <v-list-item v-if="!userInfo?.id" @click="loginDialog = true">
             <v-list-item-title>登录</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="!isLoggedIn" @click="registerDialog = true">
+          <v-list-item v-if="!userInfo?.id" @click="registerDialog = true">
             <v-list-item-title>注册</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isLoggedIn" @click="$router.push('/account')">
+          <v-list-item v-if="userInfo?.id" @click="$router.push('/account')">
             <v-list-item-title>我的空间</v-list-item-title>
           </v-list-item>
-          <v-list-item v-if="isLoggedIn" @click="logout">
+          <v-list-item v-if="userInfo?.id" @click="logout">
             <v-list-item-title>退出登录</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -60,6 +60,7 @@
         <v-card>
           <v-card-title class="headline">登录</v-card-title>
           <v-card-text>
+            <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
               label="邮箱"
               v-model="userL.email"
@@ -74,6 +75,7 @@
               :rules="[rules.required, rules.maxLength]"
             ></v-text-field>
             <v-btn block color="primary" @click="login">登录</v-btn>
+            </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -143,7 +145,6 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
 import emailService from '@/service/emailService'
 export default {
   data () {
@@ -171,32 +172,19 @@ export default {
         required: value => !!value || '不能为空',
         maxLength: value => value.length <= 20 || '不能超过20个字符',
         matchPassword: value => value === this.user.password || '两次密码必须一致'
-      },
-      profileInfo: {}
+      }
+      // userInfo: {}
     }
   },
   computed: {
-    ...mapState(['ID_email']),
-    ...mapGetters(['isLoggedIn', 'getProfile'])
+    userInfo () {
+      return this.$store.state.userModule.userInfo
+    }
   },
   created () {
     this.GetCateList()
-    const token = window.sessionStorage.getItem('token')
-    const email = window.sessionStorage.getItem('email')
-    if (token) {
-      // 刷新页面会改变vuex状态，需要mock
-      this._login(email)
-    }
-    // console.log(this.ID_email)
-    this.getProfileInfo()
-    // console.log(this.profileInfo)
   },
   methods: {
-    ...mapActions(['_login', '_logout']),
-    async getProfileInfo () {
-      const { data: res } = await this.$http.get(`profile/${this.ID_email}`)
-      this.profileInfo = res.data
-    },
     // 发送验证码
     sendVerificationCode () {
       emailService.sendVerifyCode({ mail: this.user.email })
@@ -253,28 +241,20 @@ export default {
       }
     },
     async login () {
-      const { data: res } = await this.$http.post('userlogin', this.userL)
+      const res = await this.$store.dispatch('userModule/login', { email: this.userL.email, password: this.userL.password })
+
       if (res.status !== 200) {
         this.loginDialog = false
-        return this.$toast.error(res.message, {
-          timeout: 3000
-        })
+        return this.$toast.error(res.message, { timeout: 3000 })
       }
       this.loginDialog = false
-      window.sessionStorage.setItem('token', res.token)
-      window.sessionStorage.setItem('email', this.userL.email)
-      this._login(this.userL.email)
-      this.getProfileInfo()
-
       return this.$toast.success('登陆成功', {
         timeout: 3000
       })
     },
     logout () {
-      window.sessionStorage.removeItem('token')
-      this.profileInfo = {}
-      this._logout()
-      this.$toast.success('已退出登录', {
+      this.$store.dispatch('userModule/logout')
+      return this.$toast.success('退出成功', {
         timeout: 3000
       })
     }

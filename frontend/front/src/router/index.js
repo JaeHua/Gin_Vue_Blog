@@ -8,15 +8,15 @@ import Result from '../components/Result.vue'
 import Account from '@/components/Account.vue'
 import NotFound from '@/components/404.vue'
 import * as jwtdecode from 'jwt-decode'
-
+import store from '@/store'
 Vue.use(VueRouter)
 const routes =
 [{
   path: '/',
-  name: 'home',
   component: HomeView,
   children: [{
     path: '/',
+    name: 'home',
     component: ArtList,
     meta: { title: '欢迎来到我的博客' }
   }, {
@@ -58,7 +58,7 @@ router.beforeEach((to, from, next) => {
     next({ name: '404' })
   } else {
     if (to.meta.auth) {
-      const token = window.sessionStorage.getItem('token')
+      const token = store.state.userModule.token
 
       if (token) {
         try {
@@ -66,19 +66,21 @@ router.beforeEach((to, from, next) => {
           const currentTime = Date.now() / 1000
 
           if (decoded.exp < currentTime) {
-            window.sessionStorage.removeItem('token')
-            document.title = '欢迎来到我的博客'
+            store.dispatch('userModule/logout').then(() => {
+              document.title = '欢迎来到我的博客'
 
-            next({ name: 'home' })
+              next({ name: 'home' })
+            })
           } else {
             next()
           }
         } catch (e) {
           console.error('Token decoding error:', e)
-          window.sessionStorage.removeItem('token')
-          document.title = '欢迎来到我的博客'
+          store.dispatch('userModule/logout').then(() => {
+            document.title = '欢迎来到我的博客'
 
-          next({ name: 'home' })
+            next({ name: 'home' })
+          })
         }
       } else {
         document.title = '欢迎来到我的博客'

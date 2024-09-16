@@ -11,11 +11,11 @@
           <v-list-item>
             <v-list-item-avatar>
               <!-- <img v-if="!profileInfo.avatar" src="https://randomuser.me/api/portraits/men/85.jpg" alt="User" > -->
-            <img  :src="profileInfo.avatar" alt="">
+            <img  :src="userInfo?.avatar" alt="">
 
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title class="white--text">{{ this.profileInfo.name }}</v-list-item-title>
+              <v-list-item-title class="white--text">{{ userInfo?.name }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -78,15 +78,12 @@
 import UserSettings from '@/components/UserSettings.vue'
 import LikedArticles from '@/components/LikedArticles.vue'
 import SavedArticles from '@/components/SavedArticles.vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'YourComponentName',
   data () {
     return {
-      currentView: 'settings',
-      profileInfo: {
-      }
+      currentView: 'settings'
     }
   },
   computed: {
@@ -101,27 +98,15 @@ export default {
           return UserSettings
       }
     },
-    ...mapState(['ID_email']),
-    ...mapGetters(['isLoggedIn', 'getProfile'])
+    userInfo () {
+      return this.$store.state.userModule.userInfo
+    }
+
   },
   created () {
-    const token = window.sessionStorage.getItem('token')
-    const email = window.sessionStorage.getItem('email')
-    if (token) {
-      // 刷新页面会改变vuex状态，需要mock
-      this._login(email)
-    }
-    console.log(this.ID_email)
-    this.getProfileInfo()
-    console.log(this.profileInfo)
   },
   methods: {
-    ...mapActions(['_login', '_logout']),
-    async getProfileInfo () {
-      const { data: res } = await this.$http.get(`profile/${this.ID_email}`)
-      this.profileInfo = res.data
-      // console.log(this.profileInfo)
-    }
+
   }
 }
 </script>
