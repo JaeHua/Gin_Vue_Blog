@@ -9,6 +9,7 @@ import Account from '@/components/Account.vue'
 import NotFound from '@/components/404.vue'
 import * as jwtdecode from 'jwt-decode'
 import store from '@/store'
+import UserSettings from '@/components/UserSettings.vue'
 Vue.use(VueRouter)
 const routes =
 [{
@@ -39,7 +40,13 @@ const routes =
   path: '/account',
   name: 'account',
   component: Account,
-  meta: { title: '用户空间', auth: true }
+  meta: { title: '用户空间', auth: true },
+  children: [{
+    path: '/account',
+    name: 'usersettings',
+    component: UserSettings,
+    meta: { title: '欢迎来到我的博客' }
+  }]
 },
 {
   path: '/404',

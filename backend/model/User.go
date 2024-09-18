@@ -157,6 +157,25 @@ func EditUser(id int, data *User) int {
 	return errmsg.SUCCESS
 }
 
+func UserInfoEdit(data *Profile) int {
+	var user User
+	var profile Profile
+	var maps = make(map[string]interface{})
+	var maps1 = make(map[string]interface{})
+	//密码之外的信息更新，要更新密码应该是新的单独接口
+	//log.Println(profile)
+	maps["name"] = data.Name
+	maps["desc"] = data.Desc
+	maps["avatar"] = data.Avatar
+	maps1["name"] = data.Name
+	err := DB.Model(&profile).Where("email=?", data.Email).Updates(maps).Error
+	err = DB.Model(&user).Where("email=?", data.Email).Updates(maps1).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCESS
+}
+
 func CheckLogin(username string, password string) int {
 	var user User
 	DB.Where("username=?", username).First(&user)

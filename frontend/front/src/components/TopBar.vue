@@ -6,14 +6,14 @@
         <v-img @click="gobackend" src="../assets/logo.png" alt=""></v-img>
       </v-avatar>
 
-      <v-container class="py-0 fill-height">
+      <v-container class="py-0 fill-height d-none d-md-flex">
         <v-btn @click="$router.push('/')" text color="white">首页</v-btn>
         <v-btn v-for="item in cateList" :key="item.id" text color="white" @click="$router.push(`/category/${item.id}`)">
           {{ item.name }}
         </v-btn>
       </v-container>
       <v-spacer></v-spacer>
-
+      <v-app-bar-nav-icon @click="drawer = !drawer" class="d-md-none"></v-app-bar-nav-icon>
       <v-responsive max-width color="white">
         <v-text-field
           ref="searchField"
@@ -54,7 +54,19 @@
           </v-list-item>
         </v-list>
       </v-menu>
-
+<!-- 侧边抽屉导航栏 -->
+<v-navigation-drawer v-model="drawer" app temporary>
+    <v-list>
+      <v-list-item @click="$router.push('/')">首页</v-list-item>
+      <v-list-item
+        v-for="item in cateList"
+        :key="item.id"
+        @click="$router.push(`/category/${item.id}`)"
+      >
+        {{ item.name }}
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
       <!-- Login Dialog -->
       <v-dialog v-model="loginDialog" max-width="400">
         <v-card>
@@ -149,6 +161,7 @@ import emailService from '@/service/emailService'
 export default {
   data () {
     return {
+      drawer: false, // 控制汉堡菜单的开关
       cateList: [],
       searchQuery: '',
       loginDialog: false,
@@ -265,5 +278,10 @@ export default {
 <style scoped>
 .navv {
   z-index: 1000;
+}
+@media (max-width: 960px) {
+  .nav-items {
+    display: none;
+  }
 }
 </style>

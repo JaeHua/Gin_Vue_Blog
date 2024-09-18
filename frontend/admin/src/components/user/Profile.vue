@@ -132,7 +132,7 @@ export default {
     },
     async updateProfile () {
       console.log(this.profileInfo)
-      const { data: res } = await this.$http.put(`profile/${this.profileInfo.id}`, this.profileInfo)
+      const { data: res } = await this.$http.put(`profile/${this.profileInfo.email}`, this.profileInfo)
       if (res.status !== 200) {
         return this.$message.error(res.message)
       }

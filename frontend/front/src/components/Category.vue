@@ -1,8 +1,8 @@
 <template>
   <v-col>
-    <h1 class=" catename text-center">
+    <h1 class="catename text-center">
       <span class="bracket">{</span>
-      {{  this.category}}
+      {{ this.category }}
       <span class="bracket">}</span>
     </h1>
 
@@ -13,7 +13,6 @@
       v-for="(item, index) in ArtList"
       :key="item.ID"
       @click="$router.push(`/detail/${item.ID}`)"
-
     >
       <v-row no-gutters>
         <v-col :cols="6" :class="index % 2 === 0 ? 'image-col' : 'content-col'">
@@ -63,8 +62,13 @@
       </v-row>
     </v-card>
     <div class="text-center" v-if="this.total">
-    <v-pagination   :total-visible="7" v-model="queryParam.pagenum" :length="Math.ceil(this.total/queryParam.pagesize)" @input="getArtList()"></v-pagination>
-  </div>
+      <v-pagination
+        :total-visible="7"
+        v-model="queryParam.pagenum"
+        :length="Math.ceil(this.total/queryParam.pagesize)"
+        @input="getArtList()"
+      ></v-pagination>
+    </div>
   </v-col>
 </template>
 
@@ -115,40 +119,46 @@ export default {
 <style scoped>
 .v-col {
   display: flex;
-  justify-content: center; /* Center children horizontally */
-
+  justify-content: center;
 }
 
 .article-card {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
-  width: 50%;
-  margin-left: 25%;
+  width: 60%;
+  margin: 0 auto;
 }
+
 .article-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
+
 .image-col {
   padding: 0;
 }
+
 .image-container {
   width: 100%;
-  height: 300px; /* Fixed height */
+  height: 300px;
   overflow: hidden;
   border-radius: 8px 0 0 8px;
 }
+
 .article-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .content-col {
   padding: 0;
 }
+
 .article-content {
   padding: 16px;
 }
+
 .article-header {
   display: flex;
   justify-content: space-between;
@@ -156,33 +166,39 @@ export default {
   font-size: 14px;
   color: #757575;
 }
+
 .article-category {
   display: flex;
   align-items: center;
   gap: 4px;
 }
+
 .article-date {
   display: flex;
   align-items: center;
   gap: 4px;
 }
+
 .article-title {
-  font-size: 24px; /* Increased font size */
+  font-size: 24px;
   margin: 8px 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Changed font family */
-  color: #333; /* Darker color for better contrast */
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3); /* Added text shadow */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
 }
+
 .article-description {
   font-size: 16px;
   color: #555;
   margin: 16px 0;
 }
+
 .dots {
-  position: absolute; /* Positioned absolutely within the content */
-  bottom: 16px; /* Distance from the bottom */
-  right: 16px; /* Distance from the right */
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
 }
+
 .catename {
   font-size: 3rem;
   font-weight: bold;
@@ -193,15 +209,48 @@ export default {
     2px 2px 4px rgba(0, 0, 0, 0.1),
     3px 3px 8px rgba(0, 0, 0, 0.05);
 }
+
 .bracket {
-  font-size: 3rem; /* 字体大小 */
-  font-weight: bold; /* 字体加粗 */
-  color: #f5be0b; /* 颜色 */
+  font-size: 3rem;
+  font-weight: bold;
+  color: #f5be0b;
   text-shadow:
     1px 1px 2px rgba(0, 0, 0, 0.15),
     2px 2px 4px rgba(0, 0, 0, 0.1),
-    3px 3px 8px rgba(0, 0, 0, 0.05); /* 阴影效果 */
+    3px 3px 8px rgba(0, 0, 0, 0.05);
   display: inline-block;
-  margin: 0 0.5rem; /* 间距 */
+  margin: 0 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .article-card {
+    width: 70%;
+  }
+}
+
+@media (max-width: 768px) {
+  .article-card {
+    width: 80%;
+  }
+  .image-container,
+  .article-image {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .article-card {
+    width: 95%;
+  }
+  .image-container,
+  .article-image {
+    height: 200px;
+  }
+  .article-title {
+    font-size: 20px;
+  }
+  .article-description {
+    font-size: 14px;
+  }
 }
 </style>

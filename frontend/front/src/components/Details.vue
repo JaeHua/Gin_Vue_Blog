@@ -138,7 +138,6 @@ export default {
         toc.style.top = '500px'
       }
     }
-
   }
 }
 </script>
@@ -204,5 +203,10 @@ export default {
 .toc-navigation li:hover {
   color: #0056b3;
   transform: translateX(5px);
+}
+@media (max-width: 768px) {
+  .toc-navigation {
+    display: none;
+  }
 }
 </style>

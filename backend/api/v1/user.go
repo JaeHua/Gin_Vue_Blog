@@ -94,6 +94,20 @@ func EditUser(c *gin.Context) {
 	})
 }
 
+// UserInfoEdit 用户个人信息编辑
+func UserInfoEdit(c *gin.Context) {
+	var data model.Profile
+	_ = c.ShouldBindJSON(&data)
+	code = model.UserInfoEdit(&data)
+	if code != errmsg.SUCCESS {
+		c.Abort()
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
+
 // DeleteUser 删除用户
 func DeleteUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))

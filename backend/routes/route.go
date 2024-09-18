@@ -42,9 +42,9 @@ func InitRoute() {
 		//上传文件
 		auth.POST("upload", v1.UpLoad)
 		//更新信息
-		auth.PUT("profile/:id", v1.UpdateProfile)
+		auth.PUT("profile/:emails", v1.UpdateProfile)
 		auth.GET("user/info", v1.Info)
-
+		auth.PUT("editProfile", v1.UserInfoEdit)
 	}
 	public := r.Group("api/v1")
 	{

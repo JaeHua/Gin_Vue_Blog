@@ -12,37 +12,37 @@
             <div class="mt-4 white--text">{{ profileInfo.name }}</div>
           </v-col>
         </v-card-title>
+
+        <!-- Desc Section -->
         <div class="headerinfo">
           <p class="desc">{{ profileInfo.desc }}</p>
         </div>
 
+        <!-- Icon Section -->
         <div class="icon-container">
           <div class="circle">
             <v-icon class="arrow">{{'mdi-arrow-left'}}</v-icon>
           </div>
           <div class="circle" @click="navigateTo('qq')">
-            <v-icon class="qqchat" >{{ 'mdi-qqchat' }}</v-icon>
+            <v-icon class="qqchat">{{ 'mdi-qqchat' }}</v-icon>
           </div>
           <div class="circle" @click="navigateTo('github')">
             <v-icon class="github">{{ 'mdi-github' }}</v-icon>
           </div>
-          <div class="circle"  @click="navigateTo('email')">
-            <v-icon class="email">{{'mdi-email'}}</v-icon>
+          <div class="circle" @click="navigateTo('email')">
+            <v-icon class="email">{{ 'mdi-email' }}</v-icon>
           </div>
           <div class="circle" @click="navigateTo('signal')">
-            <v-icon class="signal">{{'mdi-signal-variant'}}</v-icon>
+            <v-icon class="signal">{{ 'mdi-signal-variant' }}</v-icon>
           </div>
           <div class="circle">
-            <v-icon class="arrow">{{'mdi-arrow-right'}}</v-icon>
+            <v-icon class="arrow">{{ 'mdi-arrow-right' }}</v-icon>
           </div>
         </div>
       </v-img>
-
     </v-card>
-
   </div>
 </template>
-
 <script>
 import { mapState, mapGetters } from 'vuex'
 
@@ -122,55 +122,99 @@ export default {
 </script>
 
 <style scoped>
+/* Header Info */
 .headerinfo {
   background-color: rgba(0, 0, 0, 0.5); /* 透明黑色 */
   color: #eaeadf;
-  padding: 15px; /* 内边距 */
-  border-radius: 5px; /* 圆角 */
-  text-align: center; /* 文字居中 */
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
   margin: auto;
-  width: 34%;
-  height: 60px;
+  width: 60%; /* 调整宽度以适应小屏 */
   letter-spacing: 0;
   line-height: 30px;
 }
+
+/* Desc Text */
+.desc {
+  font-family: 'Pacifico', cursive;
+  font-size: 24px;
+  color: #f7f4f4;
+  text-align: center;
+  word-break: break-word; /* 强制长单词换行 */
+  white-space: pre-wrap; /* 保留换行符并允许多行显示 */
+  text-shadow: 2px 2px 6px rgba(255, 0, 0, 0.7),
+               -2px -2px 6px rgba(0, 255, 0, 0.7),
+               2px -2px 6px rgba(0, 0, 255, 0.7),
+               -2px 2px 6px rgba(255, 255, 0, 0.7);
+}
+
+/* Icon Container */
 .icon-container {
-  display: flex; /* 使用Flexbox布局 */
+  display: flex;
+  justify-content: center; /* 确保图标容器居中 */
+  flex-wrap: wrap; /* 允许图标在小屏幕时换行 */
   gap: 10px; /* 图标之间的间距 */
-  margin-left: 40%;
   margin-top: 15px;
 }
 
+/* Circle */
 .circle {
   background-color: rgba(0, 0, 0, 0.5); /* 透明黑色背景 */
-  padding: 10px; /* 内边距 */
+  padding: 10px;
   border-radius: 50%; /* 圆形 */
-  display: inline-flex; /* 使其成为内联块并使内容居中 */
-  align-items: center; /* 垂直居中 */
-  justify-content: center; /* 水平居中 */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease; /* 添加过渡效果 */
 }
 
+.circle:hover {
+  transform: scale(1.2); /* 鼠标悬停时放大 */
+}
+
+/* 图标颜色 */
 .qqchat {
   color: #00acee; /* QQ聊天图标颜色 */
 }
-
 .github {
   color: #333; /* GitHub图标颜色 */
 }
-
 .email {
   color: yellow;
 }
-
 .signal {
   color: rgb(255, 255, 255);
 }
-
 .arrow {
   color: #1295da;
 }
 
-/* 添加旋转和放大效果 */
+/* 媒体查询: 小屏幕适配 */
+@media (max-width: 600px) {
+  .desc {
+    font-size: 18px; /* 调整desc大小 */
+  }
+
+  .icon-container {
+    gap: 5px; /* 小屏幕时缩小图标间距 */
+    margin-top: 10px;
+  }
+
+  .circle {
+    padding: 8px; /* 小屏幕时缩小图标大小 */
+  }
+
+  .headerinfo {
+    width: 90%; /* 小屏幕时扩大headerinfo宽度 */
+  }
+}
+
+/* Avatar Hover */
+.avatar-hover:hover img {
+  animation: rotateAndZoom 0.5s forwards;
+}
+
 @keyframes rotateAndZoom {
   from {
     transform: rotate(0deg) scale(1);
@@ -180,8 +224,13 @@ export default {
   }
 }
 
-.avatar-hover:hover img {
-  animation: rotateAndZoom 0.5s forwards; /* 0.5秒的动画，向前播放 */
+/* 颜色渐变动画 */
+@keyframes colorChange {
+  0% { color: #f7f4f4; }
+  25% { color: #ff99c8; }
+  50% { color: #fcf6bd; }
+  75% { color: #d0f4de; }
+  100% { color: #a9def9; }
 }
 
 /* 添加图标放大效果 */
@@ -194,49 +243,11 @@ export default {
   }
 }
 
- .github:hover {
-  animation: zoomIn 0.3s forwards; /* 0.3秒的动画，向前播放 */
+.github:hover,
+.qqchat:hover,
+.email:hover,
+.signal:hover,
+.arrow:hover {
+  animation: zoomIn 0.3s forwards;
 }
-.qqchat:hover  {
-  animation: zoomIn 0.3s forwards; /* 0.3秒的动画，向前播放 */
-}
-.email:hover  {
-  animation: zoomIn 0.3s forwards; /* 0.3秒的动画，向前播放 */
-}
-.signal:hover  {
-  animation: zoomIn 0.3s forwards; /* 0.3秒的动画，向前播放 */
-}
-.arrow:hover  {
-  animation: zoomIn 0.3s forwards; /* 0.3秒的动画，向前播放 */
-}
-.desc {
-      font-family: 'Pacifico', cursive;
-      font-size: 24px;
-      color: #f7f4f4;
-      text-align: center;
-      animation: fadeIn 2s ease-in-out, moveUpDown 3s infinite alternate, colorChange 5s infinite alternate;
-      text-shadow: 2px 2px 6px rgba(255, 0, 0, 0.7),
-                   -2px -2px 6px rgba(0, 255, 0, 0.7),
-                   2px -2px 6px rgba(0, 0, 255, 0.7),
-                   -2px 2px 6px rgba(255, 255, 0, 0.7);
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes moveUpDown {
-      from { transform: translateY(10px); }
-      to { transform: translateY(-10px); }
-    }
-
-    @keyframes colorChange {
-      0% { color: #f7f4f4; }
-      25% { color: #ff99c8; }
-      50% { color: #fcf6bd; }
-      75% { color: #d0f4de; }
-      100% { color: #a9def9; }
-    }
-
 </style>

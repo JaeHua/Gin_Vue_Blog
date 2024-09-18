@@ -4,7 +4,6 @@ import (
 	"backend/model"
 	"backend/utils/errmsg"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
@@ -21,10 +20,10 @@ func GetProfile(c *gin.Context) {
 func UpdateProfile(c *gin.Context) {
 	var data model.Profile
 	//id, _ := strconv.Atoi(c.Param("id"))
-	email := c.Param("email")
+	email := c.Param("emails")
 
 	_ = c.ShouldBindJSON(&data)
-	log.Println(data)
+	//log.Println(data)
 	code = model.UpdateProfile(email, &data)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
