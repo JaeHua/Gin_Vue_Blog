@@ -155,3 +155,110 @@ GinVueBlog
 - Vue Router 路由
 - Vuex 状态管理
 - so on
+
+## 教程
+
+### Docker安装
+- 更新软件包列表
+```bash
+sudo apt update
+sudo apt upgrade
+```
+- 安装依赖
+```bash
+apt-get install ca-certificates curl gnupg lsb-release
+```
+- 添加官方秘钥
+```
+curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+```
+- 添加docker软件源
+```
+sudo add-apt-repository "deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu $(lsb_release -cs) stable"
+```
+- 安装docker
+```
+apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+### Pointer配置
+- 拉取
+
+```
+docker pull portainer/portainer
+```
+- 运行
+```
+docker run -p 9000:9000 -p 8000:8000 --name portainer \--restart=always \-v /var/run/docker.sock:/var/run/docker.sock \-v /mydata/portainer/data:/data \-d portainer/portainer
+```
+
+### Mysql配置
+
+- 拉取镜像（版本5.7）
+
+```Bash
+docker pull mysql:5.7
+```
+
+- 创建对应文件夹
+
+```Bash
+mkdir -p /home/mysql/conf
+mkdir -p /home/mysql/data
+```
+
+- 授权文件夹
+
+```Bash
+chmod 777 /home/mysql/conf
+chmod 777 /home/mysql/data
+```
+
+- 运行容器
+
+```Bash
+docker run --name mysql \
+  -v /home/mysql/conf:/etc/mysql/conf.d \
+  -v /home/mysql/data:/var/lib/mysql \
+  -e MYSQL_ROOT_PASSWORD=123456 \
+  -p 3306:3306 \
+  --restart=always \
+  -d mysql:5.7
+```
+
+## Redis部署
+
+- 拉取镜像(版本7.0)
+
+```Bash
+docker pull redis:7.0
+```
+
+- 创建对应文件夹
+
+```Bash
+mkdir -p /usr/local/docker/redis/conf
+mkdir -p /usr/local/docker/redis/data
+```
+
+- 授权文件夹
+
+```Bash
+chmod 777 /usr/local/docker/redis/conf
+chmod 777 /usr/local/docker/redis/data
+```
+- 复制一份配置文件
+  根据对应版本复制到redis.conf
+- 运行容器
+
+```Bash
+docker run \
+    -d \
+    -p 6379:6379 \
+    --name Redis \
+    --restart=always \
+    -v /usr/local/docker/redis/data:/data \
+    -v /usr/local/docker/redis/conf/redis.conf:/etc/redis \
+    redis
+```
+
