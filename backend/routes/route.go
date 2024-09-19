@@ -4,8 +4,20 @@ import (
 	v1 "backend/api/v1"
 	"backend/middleware"
 	"backend/utils"
+	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
+	"strings"
+
+	"github.com/gin-contrib/static"
 )
+
+func createMyRender() multitemplate.Renderer {
+	p := multitemplate.NewRenderer()
+	p.AddFromFiles("admin", "web/admin/dist/index.html")
+	p.AddFromFiles("front", "web/front/dist/index.html")
+	return p
+}
 
 // InitRoute 初始化路由
 func InitRoute() {
@@ -15,14 +27,28 @@ func InitRoute() {
 	r.Use(middleware.Logger())
 	r.Use(gin.Recovery())
 	r.Use(middleware.Cors())
-	//托管静态资源
-	r.LoadHTMLGlob("static/admin/index.html")
-	r.Static("admin/static", "static/admin/static")
-	r.StaticFile("admin/favicon.icon", "static/admin/favicon.ico")
-	r.GET("admin", func(c *gin.Context) {
-		c.HTML(200, "index.html", nil)
+	r.Use(static.Serve("/", static.LocalFile("web/front/dist", true)))
+	r.Use(static.Serve("/admin", static.LocalFile("web/admin/dist", true)))
+	r.NoRoute(func(c *gin.Context) {
+		accept := c.Request.Header.Get("Accept")
+		flag := strings.Contains(accept, "text/html")
+		if flag {
+			content, err := ioutil.ReadFile("web/front/dist/index.html")
+			if (err) != nil {
+				c.Writer.WriteHeader(404)
+				c.Writer.WriteString("Not Found")
+				return
+			}
+			c.Writer.WriteHeader(200)
+			c.Writer.Header().Add("Accept", "text/html")
+			c.Writer.Write((content))
+			c.Writer.Flush()
+		}
 	})
 
+	/*
+		后台管理路由接口
+	*/
 	auth := r.Group("api/v1")
 	auth.Use(middleware.JwtToken())
 	{
@@ -46,6 +72,9 @@ func InitRoute() {
 		auth.GET("user/info", v1.Info)
 		auth.PUT("editProfile", v1.UserInfoEdit)
 	}
+	/*
+		前端展示页面接口
+	*/
 	public := r.Group("api/v1")
 	{
 		public.POST("user/add", v1.AddUser)

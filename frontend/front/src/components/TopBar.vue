@@ -217,7 +217,7 @@ export default {
       this.cateList = res.data
     },
     gobackend () {
-      window.location.href = 'http://localhost:3000/admin'
+      window.location.href = 'http://150.109.93.8:3000/admin'
     },
     goToResult () {
       const query = this.searchQuery.trim()

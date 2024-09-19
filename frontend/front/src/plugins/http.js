@@ -2,7 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import storageService from '@/service/storageService.js'
 // axios.defaults.baseURL = 'http://localhost:3000/api/v1'
-const URL = 'http://localhost:3000/api/v1'
+const URL = 'http://150.109.93.8:3000/api/v1'
 const instance = axios.create({
   baseURL: URL, // 替换为你的 API 基础 URL
   timeout: 100000,
