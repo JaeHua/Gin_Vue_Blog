@@ -175,6 +175,7 @@ GinVueBlog
 
 http://www.jaehua.top
 ---
+![image](https://github.com/user-attachments/assets/ed804d61-a82e-44c9-b291-62fe106f36d7)
 
 ## 教程
 
