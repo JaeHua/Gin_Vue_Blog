@@ -159,6 +159,22 @@ GinVueBlog
 - Vuex 状态管理
 - so on
 
+## 部署方式
+
+- Docker 镜像化
+- Nginx 代理
+- Linux 发布正式版
+
+
+## 使用说明
+
+克隆项目,配置文件然后启动docker容器
+
+## 在线体验
+
+http://www.jaehua.top
+---
+
 ## 教程
 
 ### Docker安装
@@ -282,5 +298,33 @@ docker build -t goblog:1.0 .
 
 ```Bash
 docker run -d -p 80:80 --name MyBlog goblog:1.0
+
+## 容器监测
+
+利用**portainer**这个工具监控我们docker的运行状况
+
+![image](https://github.com/JaeHua/GoKits/assets/126366914/1bcaaa56-e4a1-42a6-bd45-a2984ac7a7d5)
+
+
+## Redis管理
+
+推荐使用**RedisDesktopManager** ,开源免费的轻巧工具
+![image](https://github.com/JaeHua/GoKits/assets/126366914/94845abd-b4a6-46b4-b0a4-c6fc062ca00a)
+
+下载链接：https://github.com/RedisInsight/RedisDesktopManager/releases
+
+## Mysql管理
+
+推荐使用**DBeaver**，开源免费工具
+
+## VPS推荐
+
+推荐https://www.hostyun.com/  **便宜够用**
+
+## Thanks for free JetBrains Open Source license
+感谢JetBrains免费开源授权
+![image](https://github.com/user-attachments/assets/be6643f6-6ea1-4720-8cdb-fdbac9a98dab)
+
+
 ```
 
