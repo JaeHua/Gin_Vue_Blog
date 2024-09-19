@@ -304,7 +304,7 @@ docker run -d -p 80:80 --name MyBlog goblog:1.0
 
 利用**portainer**这个工具监控我们docker的运行状况
 
-![image](https://github.com/JaeHua/GoKits/assets/126366914/1bcaaa56-e4a1-42a6-bd45-a2984ac7a7d5)
+![image](https://github.com/user-attachments/assets/299675a0-6d70-4ee1-ac1a-50dcb8dbd641)
 
 
 ## Redis管理
