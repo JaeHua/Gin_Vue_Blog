@@ -278,6 +278,6 @@ docker build -t goblog:1.0 .
 - 运行容器
 
 ```Bash
-docker run -d -p 3344:3344 --name MyBlog goblog:1.0
+docker run -d -p 3000:3000 --name MyBlog goblog:1.0
 ```
 
