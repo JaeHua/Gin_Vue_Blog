@@ -47,6 +47,9 @@ GinVueBlog
 │  │      cors.go
 │  │      jwt.go
 │  │      log.go
+│  ├─web
+│  │      admin
+│  │      front
 │  │      
 │  ├─model
 │  │      Article.go
