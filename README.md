@@ -261,4 +261,23 @@ docker run \
     -v /usr/local/docker/redis/conf/redis.conf:/etc/redis \
     redis
 ```
+### Gin部署
+
+- 创建对应文件夹(代码打包放在这)
+
+```Bash
+mkdir /home/blog/
+```
+
+- 构建镜像
+
+```Bash
+docker build -t goblog:1.0 .
+```
+
+- 运行容器
+
+```Bash
+docker run -d -p 3344:3344 --name MyBlog goblog:1.0
+```
 
