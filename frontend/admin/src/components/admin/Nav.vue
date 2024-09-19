@@ -32,7 +32,7 @@ export default {
       this.$router.push('/' + item.key).catch(err => err)
     },
     navigateToBlog () {
-      window.location.href = 'http://localhost:8080/'
+      window.location.href = 'http://150.109.93.8'
     }
   }
 }

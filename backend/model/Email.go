@@ -45,7 +45,7 @@ func SendEmailValidate(em []string) (string, int, error) {
 	e.Text = []byte(content)
 
 	//设置服务器相关的配置
-	_ = e.Send("smtp.qq.com:25", smtp.PlainAuth("", "2624857134@qq.com", "ggtwjomswvvheaci", "smtp.qq.com"))
+	_ = e.Send("smtp.qq.com:587", smtp.PlainAuth("", "2624857134@qq.com", "ggtwjomswvvheaci", "smtp.qq.com"))
 
 	return vCode, errmsg.SUCCESS, err
 }

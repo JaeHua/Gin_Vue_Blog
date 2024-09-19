@@ -19,7 +19,7 @@ RUN go env -w GOPROXY=https://goproxy.cn,direct
 RUN go build
 
 # 暴露端口
-EXPOSE 3000
+EXPOSE 80
 
 # 镜像默认入口命令
 ENTRYPOINT ["./backend"]

@@ -2,7 +2,7 @@
 import axios from 'axios'
 import Vue from 'vue'
 
-const URL = 'http://150.109.93.8:3000/api/v1'
+const URL = 'http://150.109.93.8:80/api/v1'
 // 创建一个 axios 实例
 const instance = axios.create({
   baseURL: URL, // 替换为你的 API 基础 URL
