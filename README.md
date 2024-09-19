@@ -159,18 +159,19 @@ GinVueBlog
 - Vuex 状态管理
 - so on
 
-## 部署方式
+### 部署方式
 
 - Docker 镜像化
 - Nginx 代理
 - Linux 发布正式版
 
 
-## 使用说明
+### 使用说明
 
-克隆项目,配置文件然后启动docker容器
+克隆项目,配置文件然后启动docker容器.
+在backend下新建web文件夹，把main下web拷贝过来
 
-## 在线体验
+### 在线体验
 
 http://www.jaehua.top
 ---
