@@ -241,7 +241,7 @@ chmod 777 /home/mysql/data
 docker run --name mysql \
   -v /home/mysql/conf:/etc/mysql/conf.d \
   -v /home/mysql/data:/var/lib/mysql \
-  -e MYSQL_ROOT_PASSWORD=asofhaoihfiauyfuiacajhd \
+  -e MYSQL_ROOT_PASSWORD=asofhaoix13 \
   -p 3333:3306 \
   --restart=always \
   -d mysql:5.7
